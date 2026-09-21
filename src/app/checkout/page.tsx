@@ -13,6 +13,7 @@ import {
   IconChevronLeft,
   IconLock,
   IconTrash,
+  IconUserCircle,
 } from "@/components/icons";
 
 function formatPrice(price: number) {
@@ -187,8 +188,28 @@ export default function CheckoutPage() {
           )}
 
           {step === "details" && (
-            <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_320px]">
-              <form
+            <div className="mt-8">
+              <div className="flex flex-col items-start justify-between gap-3 rounded-xl border border-border bg-blue-tint px-5 py-4 sm:flex-row sm:items-center">
+                <p className="text-sm text-ink">
+                  Уже записывались к нам? Войдите в личный кабинет — данные заполнятся сами.
+                </p>
+                <a
+                  href="#"
+                  className="flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border border-blue bg-surface px-4 py-2 text-sm font-medium text-blue transition-colors hover:bg-blue hover:text-white"
+                >
+                  <IconUserCircle className="h-4 w-4" />
+                  Войти в личный кабинет
+                </a>
+              </div>
+
+              <div className="my-5 flex items-center gap-3">
+                <span className="h-px flex-1 bg-border" />
+                <span className="text-xs text-muted">или заполните форму</span>
+                <span className="h-px flex-1 bg-border" />
+              </div>
+
+              <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+                <form
                 onSubmit={handleDetailsSubmit}
                 className="flex flex-col gap-5 rounded-xl border border-border bg-surface p-6 shadow-[0_1px_2px_rgba(16,24,40,0.04)]"
               >
@@ -300,6 +321,7 @@ export default function CheckoutPage() {
                 onApplyPromo={applyPromo}
                 onRemovePromo={removePromo}
               />
+              </div>
             </div>
           )}
 

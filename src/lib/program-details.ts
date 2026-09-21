@@ -41,7 +41,7 @@ const overrides: Record<string, Partial<ProgramDetail>> = {
     ],
     speakerBio:
       "Налоговый консультант, эксперт-практик с более чем 15-летним опытом. Специализируется на вопросах НДС, налогообложения и бухгалтерского учёта. Регулярный автор публикаций и спикер профессиональных конференций.",
-    speakerPhoto: "/speaker-vikhlyaeva.jpg",
+    speakerPhoto: "/avatar-placeholder.png",
     documentName: "Информационное письмо.pdf",
     documentSize: "PDF, 1.2 МБ",
     platformLabel: "На платформе Дома НТ",

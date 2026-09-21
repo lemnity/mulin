@@ -122,35 +122,52 @@ export function ScheduleExplorer() {
 
   return (
     <div>
-      <FiltersPanel
-        state={filtersState}
-        onToggleType={(v) => {
-          setTypes((s) => toggleInSet(s, v));
-          afterChange();
-        }}
-        onToggleFormat={(v) => {
-          setFormats((s) => toggleInSet(s, v));
-          afterChange();
-        }}
-        onToggleAudience={(v) => {
-          setAudiences((s) => toggleInSet(s, v));
-          afterChange();
-        }}
-        onToggleSpeaker={(v) => {
-          setSpeakers((s) => toggleInSet(s, v));
-          afterChange();
-        }}
-        onDateFromChange={(v) => {
-          setDateFrom(v);
-          afterChange();
-        }}
-        onDateToChange={(v) => {
-          setDateTo(v);
-          afterChange();
-        }}
-        onReset={resetAll}
-        hasActiveFilters={activeFilterCount > 0}
-      />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <FiltersPanel
+          state={filtersState}
+          onToggleType={(v) => {
+            setTypes((s) => toggleInSet(s, v));
+            afterChange();
+          }}
+          onToggleFormat={(v) => {
+            setFormats((s) => toggleInSet(s, v));
+            afterChange();
+          }}
+          onToggleAudience={(v) => {
+            setAudiences((s) => toggleInSet(s, v));
+            afterChange();
+          }}
+          onToggleSpeaker={(v) => {
+            setSpeakers((s) => toggleInSet(s, v));
+            afterChange();
+          }}
+          onDateFromChange={(v) => {
+            setDateFrom(v);
+            afterChange();
+          }}
+          onDateToChange={(v) => {
+            setDateTo(v);
+            afterChange();
+          }}
+          onReset={resetAll}
+          hasActiveFilters={activeFilterCount > 0}
+        />
+
+        <div className="flex items-center gap-3">
+          <span className="hidden text-sm text-muted sm:inline">Сортировать:</span>
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as SortKey)}
+            className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-ink"
+          >
+            {sortOptions.map((s) => (
+              <option key={s.value} value={s.value}>
+                {s.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
 
       <div className="min-w-0">
         {/* results header */}
@@ -160,44 +177,29 @@ export function ScheduleExplorer() {
             {pluralizePrograms(filtered.length)}
           </p>
 
-          <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-muted sm:inline">Сортировать:</span>
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value as SortKey)}
-              className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-ink"
+          <div className="flex overflow-hidden rounded-lg border border-border">
+            <button
+              type="button"
+              onClick={() => setView("list")}
+              aria-pressed={view === "list"}
+              aria-label="Список"
+              className={`flex h-9 w-9 items-center justify-center ${
+                view === "list" ? "bg-blue-tint text-blue" : "bg-surface text-muted"
+              }`}
             >
-              {sortOptions.map((s) => (
-                <option key={s.value} value={s.value}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-
-            <div className="flex overflow-hidden rounded-lg border border-border">
-              <button
-                type="button"
-                onClick={() => setView("list")}
-                aria-pressed={view === "list"}
-                aria-label="Список"
-                className={`flex h-9 w-9 items-center justify-center ${
-                  view === "list" ? "bg-blue-tint text-blue" : "bg-surface text-muted"
-                }`}
-              >
-                <IconList className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setView("grid")}
-                aria-pressed={view === "grid"}
-                aria-label="Плитка"
-                className={`flex h-9 w-9 items-center justify-center border-l border-border ${
-                  view === "grid" ? "bg-blue-tint text-blue" : "bg-surface text-muted"
-                }`}
-              >
-                <IconGrid className="h-4 w-4" />
-              </button>
-            </div>
+              <IconList className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setView("grid")}
+              aria-pressed={view === "grid"}
+              aria-label="Плитка"
+              className={`flex h-9 w-9 items-center justify-center border-l border-border ${
+                view === "grid" ? "bg-blue-tint text-blue" : "bg-surface text-muted"
+              }`}
+            >
+              <IconGrid className="h-4 w-4" />
+            </button>
           </div>
         </div>
 

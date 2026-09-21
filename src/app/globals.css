@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #16213a;
+  --body-text: #5b6472;
+  --muted: #8a93a3;
+
+  --page-bg: #f7f8fb;
+  --surface: #ffffff;
+  --hero-band: #eef3f9;
+  --border: #e6e9f0;
+
+  --blue: #1d6fe0;
+  --blue-dark: #1552b0;
+  --blue-tint: #e5eefd;
+
+  --green-tint: #ddf3e4;
+  --green-text: #189652;
+
+  --amber-tint: #fbe9d2;
+  --amber-text: #b7691a;
+
+  --footer-bg: #1b2436;
+  --footer-text: #aab2c2;
+  --footer-line: #2c3650;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-body: var(--body-text);
+  --color-muted: var(--muted);
+
+  --color-page: var(--page-bg);
+  --color-surface: var(--surface);
+  --color-hero-band: var(--hero-band);
+  --color-border: var(--border);
+
+  --color-blue: var(--blue);
+  --color-blue-dark: var(--blue-dark);
+  --color-blue-tint: var(--blue-tint);
+
+  --color-green-tint: var(--green-tint);
+  --color-green-text: var(--green-text);
+
+  --color-amber-tint: var(--amber-tint);
+  --color-amber-text: var(--amber-text);
+
+  --color-footer-bg: var(--footer-bg);
+  --color-footer-text: var(--footer-text);
+  --color-footer-line: var(--footer-line);
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+}
+
+body {
+  background: var(--page-bg);
+  color: var(--ink);
+}
+
+::selection {
+  background: var(--blue);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes cart-bump {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.3);
+  }
+  60% {
+    transform: scale(0.94);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-cart-bump {
+  animation: cart-bump 0.4s ease-out;
+}
+
+@keyframes cart-toast {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 4px);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -4px);
+  }
+}
+
+.animate-cart-toast {
+  animation: cart-toast 1.3s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

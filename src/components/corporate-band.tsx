@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { IconBuilding, IconCheck } from "@/components/icons";
+import { IconCheck } from "@/components/icons";
 
 const checklist = [
   "Индивидуальные программы",
@@ -38,16 +38,15 @@ export function CorporateBand() {
           </div>
         </div>
 
-        <div className="relative min-h-[260px] overflow-hidden rounded-2xl bg-gradient-to-br from-blue to-ink p-8">
-          <span className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10" />
-          <span className="pointer-events-none absolute -bottom-14 -left-10 h-48 w-48 rounded-full bg-white/10" />
-          <span className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 text-white">
-            <IconBuilding className="h-6 w-6" />
-          </span>
-          <ul className="relative mt-6 space-y-3">
+        <div className="rounded-2xl bg-ink p-8 lg:p-10">
+          <p className="text-sm text-white/60">Уже обучили команды</p>
+          <p className="tabular mt-1 text-5xl font-extrabold text-white">120+</p>
+          <p className="text-sm text-white/60">организаций по всей России</p>
+
+          <ul className="mt-7 space-y-3 border-t border-white/10 pt-6">
             {checklist.map((item) => (
               <li key={item} className="flex items-center gap-2.5 text-sm font-medium text-white">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/20">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/15">
                   <IconCheck className="h-3 w-3" />
                 </span>
                 {item}

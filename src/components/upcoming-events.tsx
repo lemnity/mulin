@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { programs, type ProgramType } from "@/lib/programs";
-import { IconArrowRight, IconClock, IconMonitor, IconPin } from "@/components/icons";
+import { IconClock, IconMonitor, IconPin } from "@/components/icons";
 
 const typeBadge: Record<ProgramType, string> = {
   Вебинар: "bg-blue-tint text-blue",
   Семинар: "bg-green-tint text-green-text",
   Курс: "bg-amber-tint text-amber-text",
 };
+
+function formatPrice(price: number) {
+  return `${new Intl.NumberFormat("ru-RU").format(price)} ₽`;
+}
 
 export function UpcomingEvents() {
   const items = programs.slice(0, 3);
@@ -24,7 +28,7 @@ export function UpcomingEvents() {
           <Link
             key={p.id}
             href={`/programs/${p.id}`}
-            className="group flex flex-col rounded-xl border border-border bg-surface p-5 transition-colors hover:border-blue"
+            className="flex flex-col rounded-xl border border-border bg-surface p-5 transition-colors hover:border-blue"
           >
             <div className="flex items-center justify-between gap-3">
               <span
@@ -51,10 +55,8 @@ export function UpcomingEvents() {
                 {p.timeRange}
               </span>
             </div>
-            <span className="mt-4 flex justify-end">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-tint text-blue transition-colors group-hover:bg-blue group-hover:text-white">
-                <IconArrowRight className="h-4 w-4" />
-              </span>
+            <span className="tabular mt-4 border-t border-border pt-4 text-lg font-extrabold text-ink">
+              {formatPrice(p.price)}
             </span>
           </Link>
         ))}

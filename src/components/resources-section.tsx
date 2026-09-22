@@ -25,12 +25,7 @@ const resources = [
 export function ResourcesSection() {
   return (
     <section className="mx-auto mt-16 max-w-7xl px-6 lg:px-10">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-ink">Полезное для специалистов</h2>
-        <Link href="/about/documents" className="text-sm font-medium text-blue hover:text-blue-dark">
-          Все материалы →
-        </Link>
-      </div>
+      <h2 className="text-2xl font-bold text-ink">Полезное для специалистов</h2>
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
         {resources.map(({ title, desc, href, icon: Icon }) => (
           <Link

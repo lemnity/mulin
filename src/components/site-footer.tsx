@@ -10,7 +10,7 @@ const columns = [
       { label: "Курсы", href: "/training/courses" },
       { label: "Вебинары", href: "/training/webinars" },
       { label: "Корпоративное обучение", href: "/corporate" },
-      { label: "Расписание", href: "/#programs" },
+      { label: "Расписание", href: "/schedule" },
     ],
   },
   {

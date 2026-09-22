@@ -72,7 +72,8 @@ export function ScheduleExplorer() {
       if (dateFrom && p.dateISO < dateFrom) return false;
       if (dateTo && p.dateISO > dateTo) return false;
       if (q) {
-        const haystack = `${p.title} ${p.description} ${p.speaker} ${p.code}`.toLowerCase();
+        const haystack =
+          `${p.title} ${p.description} ${p.speaker} ${p.code} ${p.categories.join(" ")} ${p.format} ${p.location} ${p.dateLabel}`.toLowerCase();
         if (!haystack.includes(q)) return false;
       }
       return true;
@@ -107,7 +108,7 @@ export function ScheduleExplorer() {
   }
 
   function resetAll() {
-    if (query) router.push("/#programs");
+    if (query) router.push("/schedule#programs");
     setTypes(new Set());
     setFormats(new Set());
     setAudiences(new Set());

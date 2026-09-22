@@ -17,7 +17,7 @@ export function HeroSearch() {
     } else {
       params.delete("q");
     }
-    router.push(`/?${params.toString()}#programs`);
+    router.push(`/schedule?${params.toString()}#programs`);
     document.getElementById("programs")?.scrollIntoView({ behavior: "smooth" });
   }
 

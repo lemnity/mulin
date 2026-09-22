@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { IconCart, IconChevronDown, IconPhone, IconUserCircle } from "@/components/icons";
 import { LogoLockup } from "@/components/logo";
 import { orderLabel, useCart } from "@/lib/cart-context";
 
 type NavChild = { label: string; href: string };
-type NavItem = { label: string; href?: string; active?: boolean; children?: NavChild[] };
+type NavItem = { label: string; href?: string; children?: NavChild[] };
 
 const navItems: NavItem[] = [
   {
@@ -19,7 +20,7 @@ const navItems: NavItem[] = [
       { label: "Корпоративное обучение", href: "/corporate" },
     ],
   },
-  { label: "Расписание", href: "/#programs", active: true },
+  { label: "Расписание", href: "/schedule" },
   {
     label: "Аттестация",
     children: [
@@ -41,6 +42,15 @@ const navItems: NavItem[] = [
   },
   { label: "Контакты", href: "/contacts" },
 ];
+
+function isLinkActive(pathname: string, href: string) {
+  return href !== "/" && (pathname === href || pathname.startsWith(`${href}/`));
+}
+
+function isNavItemActive(pathname: string, item: NavItem) {
+  if (item.href) return isLinkActive(pathname, item.href);
+  return item.children?.some((child) => isLinkActive(pathname, child.href)) ?? false;
+}
 
 function MenuIcon() {
   return (
@@ -93,14 +103,14 @@ function CartButton() {
   );
 }
 
-function DesktopNavLink({ item }: { item: NavItem }) {
+function DesktopNavLink({ item, active }: { item: NavItem; active: boolean }) {
   if (!item.children) {
     return (
       <Link
         href={item.href!}
-        aria-current={item.active ? "page" : undefined}
+        aria-current={active ? "page" : undefined}
         className={`flex items-center gap-1 whitespace-nowrap rounded-md px-3 py-2 text-[0.9rem] transition-colors ${
-          item.active ? "font-medium text-blue" : "text-ink/85 hover:text-ink"
+          active ? "font-medium text-blue" : "text-ink/85 hover:text-ink"
         }`}
       >
         {item.label}
@@ -129,14 +139,14 @@ function DesktopNavLink({ item }: { item: NavItem }) {
   );
 }
 
-function MobileNavLink({ item }: { item: NavItem }) {
+function MobileNavLink({ item, active }: { item: NavItem; active: boolean }) {
   if (!item.children) {
     return (
       <Link
         href={item.href!}
-        aria-current={item.active ? "page" : undefined}
+        aria-current={active ? "page" : undefined}
         className={`block rounded-md px-3 py-2.5 text-[0.95rem] ${
-          item.active ? "font-medium text-blue" : "text-ink/85 hover:text-ink"
+          active ? "font-medium text-blue" : "text-ink/85 hover:text-ink"
         }`}
       >
         {item.label}
@@ -166,6 +176,8 @@ function MobileNavLink({ item }: { item: NavItem }) {
 }
 
 export function SiteHeader() {
+  const pathname = usePathname();
+
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-surface">
       <div className="mx-auto flex max-w-7xl items-center gap-5 px-6 py-3.5 lg:px-10">
@@ -179,7 +191,7 @@ export function SiteHeader() {
 
         <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex">
           {navItems.map((item) => (
-            <DesktopNavLink key={item.label} item={item} />
+            <DesktopNavLink key={item.label} item={item} active={isNavItemActive(pathname, item)} />
           ))}
         </nav>
 
@@ -210,7 +222,7 @@ export function SiteHeader() {
             </summary>
             <nav className="absolute right-0 top-[calc(100%+0.75rem)] max-h-[75vh] w-72 overflow-y-auto rounded-xl border border-border bg-surface p-2 shadow-lg">
               {navItems.map((item) => (
-                <MobileNavLink key={item.label} item={item} />
+                <MobileNavLink key={item.label} item={item} active={isNavItemActive(pathname, item)} />
               ))}
               <div className="mt-1 border-t border-border px-3 pb-1 pt-3">
                 <a href="tel:88002504191" className="block text-sm font-semibold text-ink">

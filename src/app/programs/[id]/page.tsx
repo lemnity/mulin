@@ -49,8 +49,8 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
       <Breadcrumbs
         items={[
           { label: "Главная", href: "/" },
-          { label: "Расписание", href: "/#programs" },
-          { label: typePlural[program.type], href: "/#programs" },
+          { label: "Расписание", href: "/schedule" },
+          { label: typePlural[program.type], href: "/schedule" },
           { label: program.title },
         ]}
       />
@@ -120,7 +120,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
                       Похожие мероприятия
                     </SectionHeading>
                     <Link
-                      href="/#programs"
+                      href="/schedule"
                       className="text-sm font-medium text-blue hover:text-blue-dark"
                     >
                       Перейти к расписанию →

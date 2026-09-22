@@ -45,7 +45,7 @@ export function PlaceholderPage({
               ))}
             </ul>
             <Link
-              href="/#programs"
+              href="/schedule"
               className="mt-6 inline-flex items-center gap-2 rounded-lg bg-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-dark"
             >
               Перейти к расписанию

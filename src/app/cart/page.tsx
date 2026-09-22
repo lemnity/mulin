@@ -37,7 +37,7 @@ export default function CartPage() {
                 Выберите семинар, курс или вебинар в расписании — он появится здесь.
               </p>
               <Link
-                href="/#programs"
+                href="/schedule"
                 className="mt-5 inline-flex items-center gap-2 rounded-lg bg-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-dark"
               >
                 К расписанию

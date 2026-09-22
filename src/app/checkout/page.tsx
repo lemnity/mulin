@@ -150,7 +150,7 @@ export default function CheckoutPage() {
           <div className="mx-auto max-w-7xl px-6 py-16 text-center lg:px-10">
             <p className="text-ink">Ваш заказ пока пуст — оформлять пока нечего.</p>
             <Link
-              href="/#programs"
+              href="/schedule"
               className="mt-5 inline-flex items-center gap-2 rounded-lg bg-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-dark"
             >
               К расписанию

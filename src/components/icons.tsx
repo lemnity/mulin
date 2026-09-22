@@ -314,3 +314,52 @@ export function IconChevronUp({ className }: IconProps) {
     </svg>
   );
 }
+
+export function IconCalculator({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <rect x="4" y="2.5" width="12" height="15" rx="1.5" />
+      <path d="M6.5 5.5h7M6.5 9h.01M10 9h.01M13.5 9h.01M6.5 12h.01M10 12h.01M13.5 12h.01M6.5 15h.01M10 15h.01M13.5 15h.01" />
+    </svg>
+  );
+}
+
+export function IconScale({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <path d="M10 2.5v15M6 17.5h8" />
+      <path d="M10 4.5 4 6l3 6.5a3 3 0 0 0 6 0L10 6Z" />
+      <path d="M4 6 3 8.5M4 6l1 2.5M16 6l-1 2.5M16 6l1 2.5" />
+    </svg>
+  );
+}
+
+export function IconShield({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <path d="M10 2.5 16 4.5v5c0 4.2-2.6 6.9-6 8-3.4-1.1-6-3.8-6-8v-5L10 2.5Z" />
+      <path d="m7.2 9.8 1.9 1.9 3.7-4" />
+    </svg>
+  );
+}
+
+export function IconCoins({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <ellipse cx="7.2" cy="6" rx="4.2" ry="2.3" />
+      <path d="M3 6v3c0 1.3 1.9 2.3 4.2 2.3S11.4 10.3 11.4 9V6" />
+      <path d="M3 9v3c0 1.3 1.9 2.3 4.2 2.3.7 0 1.4-.1 2-.3" />
+      <ellipse cx="12.8" cy="10.5" rx="4.2" ry="2.3" />
+      <path d="M8.6 10.5v3c0 1.3 1.9 2.3 4.2 2.3S17 14.8 17 13.5v-3" />
+    </svg>
+  );
+}
+
+export function IconGraduationCap({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <path d="M2 7.5 10 4l8 3.5-8 3.5-8-3.5Z" />
+      <path d="M5.5 9.3v3.4c0 1.2 2 2.3 4.5 2.3s4.5-1.1 4.5-2.3V9.3M17 7.5V13" />
+    </svg>
+  );
+}

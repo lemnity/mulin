@@ -1,10 +1,22 @@
-import { Suspense } from "react";
+import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { HeroPhoto } from "@/components/hero-photo";
-import { HeroSearch } from "@/components/hero-search";
-import { ScheduleExplorer } from "@/components/schedule-explorer";
+import { HomeHero } from "@/components/home-hero";
+import { HomeSearchBand } from "@/components/home-search-band";
+import { DirectionsGrid } from "@/components/directions-grid";
+import { UpcomingEvents } from "@/components/upcoming-events";
+import { CorporateBand } from "@/components/corporate-band";
+import { WhyUs } from "@/components/why-us";
+import { LecturersSection } from "@/components/lecturers-section";
+import { ResourcesSection } from "@/components/resources-section";
 import { NewsletterBand } from "@/components/newsletter-band";
+import { HelpBand } from "@/components/help-band";
+
+export const metadata: Metadata = {
+  title: "Дом науки и техники — профессиональное обучение",
+  description:
+    "Семинары, курсы и вебинары повышения квалификации для бухгалтерии, кадровой службы, юристов и руководителей. С 1998 года.",
+};
 
 export default function Home() {
   return (
@@ -12,35 +24,20 @@ export default function Home() {
       <SiteHeader />
 
       <main className="flex-1">
-        <section className="bg-hero-band">
-          <div className="mx-auto max-w-7xl px-6 py-12 lg:px-10 lg:py-16">
-            <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
-              <div>
-                <p className="text-xs font-semibold tracking-wide text-blue uppercase">
-                  Повышение квалификации
-                </p>
-                <h1 className="mt-3 max-w-[18ch] text-4xl font-extrabold leading-[1.1] text-ink sm:text-5xl">
-                  Программы и расписание
-                </h1>
-                <p className="mt-5 max-w-[54ch] text-[1.05rem] leading-relaxed text-body">
-                  Семинары, курсы и вебинары для специалистов бухгалтерии, кадровой службы,
-                  юристов, руководителей и всех, кто развивает профессиональные компетенции.
-                </p>
-                <Suspense>
-                  <HeroSearch />
-                </Suspense>
-              </div>
-              <HeroPhoto />
-            </div>
-          </div>
-        </section>
+        <HomeHero />
+        <HomeSearchBand />
+        <DirectionsGrid />
+        <UpcomingEvents />
+        <CorporateBand />
+        <WhyUs />
+        <LecturersSection />
+        <ResourcesSection />
 
-        <section id="programs" className="mx-auto max-w-7xl scroll-mt-20 px-6 py-12 lg:px-10">
-          <Suspense>
-            <ScheduleExplorer />
-          </Suspense>
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <NewsletterBand />
-        </section>
+        </div>
+
+        <HelpBand />
       </main>
 
       <SiteFooter />

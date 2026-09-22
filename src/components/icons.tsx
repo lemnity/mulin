@@ -277,6 +277,14 @@ export function IconCheck({ className }: IconProps) {
   );
 }
 
+export function IconPlus({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <path d="M10 4v12M4 10h12" />
+    </svg>
+  );
+}
+
 export function IconDownload({ className }: IconProps) {
   return (
     <svg viewBox="0 0 20 20" className={className} {...base}>

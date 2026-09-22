@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { orderLabel, useCart } from "@/lib/cart-context";
+import { useParticipants } from "@/lib/participants";
 import type { Program } from "@/lib/programs";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -12,6 +13,8 @@ import {
   IconCheck,
   IconChevronLeft,
   IconLock,
+  IconMail,
+  IconPlus,
   IconTrash,
   IconUserCircle,
 } from "@/components/icons";
@@ -25,7 +28,7 @@ const PROMO_CODES: Record<string, number> = {
   "КОРП15": 0.15,
 };
 
-type Step = "details" | "payment" | "done";
+type Step = "details" | "participants" | "payment" | "done";
 type PaymentMethod = "card" | "invoice";
 type Promo = { code: string; discount: number };
 
@@ -35,7 +38,6 @@ type Attendee = {
   email: string;
   org: string;
   inn: string;
-  comment: string;
 };
 
 type PaidOrder = {
@@ -46,12 +48,15 @@ type PaidOrder = {
   orderNumber: string;
 };
 
-const emptyAttendee: Attendee = { name: "", phone: "", email: "", org: "", inn: "", comment: "" };
+const emptyAttendee: Attendee = { name: "", phone: "", email: "", org: "", inn: "" };
 
 const steps: Array<{ key: Step; label: string }> = [
   { key: "details", label: "Данные слушателя" },
+  { key: "participants", label: "Участники" },
   { key: "payment", label: "Оплата" },
 ];
+
+const emptyParticipantForm = { firstName: "", lastName: "", position: "", email: "", phone: "" };
 
 function StepIndicator({ step }: { step: Step }) {
   const currentIndex = steps.findIndex((s) => s.key === step);
@@ -88,6 +93,7 @@ function StepIndicator({ step }: { step: Step }) {
 
 export default function CheckoutPage() {
   const { items, total, clear } = useCart();
+  const { roster, addParticipant, removeParticipant } = useParticipants();
   const [step, setStep] = useState<Step>("details");
   const [attendee, setAttendee] = useState<Attendee>(emptyAttendee);
   const [method, setMethod] = useState<PaymentMethod>("card");
@@ -95,6 +101,9 @@ export default function CheckoutPage() {
   const [promo, setPromo] = useState<Promo | null>(null);
   const [promoError, setPromoError] = useState("");
   const [paidOrder, setPaidOrder] = useState<PaidOrder | null>(null);
+  const [selectedParticipantIds, setSelectedParticipantIds] = useState<Set<string>>(new Set());
+  const [showAddParticipant, setShowAddParticipant] = useState(false);
+  const [participantForm, setParticipantForm] = useState(emptyParticipantForm);
 
   const discountedTotal = useMemo(
     () => (promo ? Math.round(total * (1 - promo.discount)) : total),
@@ -107,8 +116,32 @@ export default function CheckoutPage() {
 
   function handleDetailsSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setStep("payment");
+    setStep("participants");
   }
+
+  function toggleParticipant(id: string) {
+    setSelectedParticipantIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function updateParticipantForm<K extends keyof typeof emptyParticipantForm>(
+    key: K,
+    value: (typeof emptyParticipantForm)[K],
+  ) {
+    setParticipantForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function handleAddParticipant() {
+    const created = addParticipant(participantForm);
+    setSelectedParticipantIds((prev) => new Set(prev).add(created.id));
+    setParticipantForm(emptyParticipantForm);
+    setShowAddParticipant(false);
+  }
+
 
   function applyPromo() {
     const code = promoInput.trim().toUpperCase();
@@ -285,25 +318,11 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                <div>
-                  <label htmlFor="comment" className="mb-1.5 block text-sm font-medium text-ink">
-                    Комментарий <span className="font-normal text-muted">(необязательно)</span>
-                  </label>
-                  <textarea
-                    id="comment"
-                    rows={3}
-                    value={attendee.comment}
-                    onChange={(e) => updateAttendee("comment", e.target.value)}
-                    placeholder="Например, сколько сотрудников от компании планируют участие"
-                    className="w-full resize-none rounded-lg border border-border bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-muted focus:border-blue"
-                  />
-                </div>
-
                 <button
                   type="submit"
                   className="mt-2 flex items-center justify-center gap-2 self-start rounded-lg bg-blue px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-dark"
                 >
-                  Продолжить к оплате
+                  Начать оформление
                   <IconArrowRight className="h-4 w-4" />
                 </button>
               </form>
@@ -322,6 +341,191 @@ export default function CheckoutPage() {
                 onRemovePromo={removePromo}
               />
               </div>
+            </div>
+          )}
+
+          {step === "participants" && (
+            <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_320px]">
+              <div className="flex flex-col gap-5">
+                <div className="flex items-start gap-3 rounded-xl border border-green-text/20 bg-green-tint/60 px-5 py-4">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface text-green-text">
+                    <IconMail className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="font-semibold text-ink">Вам создан личный кабинет</p>
+                    <p className="mt-1 text-sm text-body">
+                      На {attendee.email || "указанный email"} отправлено письмо с активацией.
+                      Подтвердите его, чтобы в следующий раз данные заполнялись автоматически.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-5 rounded-xl border border-border bg-surface p-6 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+                  <div>
+                    <h2 className="text-lg font-bold text-ink">Участники</h2>
+                    <p className="mt-1 text-sm text-body">
+                      Добавьте коллег, которые тоже примут участие. Данные сохранятся в личном
+                      кабинете и их можно будет использовать при оформлении следующих заявок.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col gap-2.5">
+                    {roster.map((p) => (
+                      <label
+                        key={p.id}
+                        className={`flex items-center justify-between gap-3 rounded-lg border p-3 transition-colors ${
+                          selectedParticipantIds.has(p.id)
+                            ? "border-blue bg-blue-tint/40"
+                            : "border-border"
+                        }`}
+                      >
+                        <span className="flex min-w-0 items-center gap-3">
+                          <input
+                            type="checkbox"
+                            checked={selectedParticipantIds.has(p.id)}
+                            onChange={() => toggleParticipant(p.id)}
+                            className="h-4 w-4 shrink-0 rounded border-border text-blue"
+                          />
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-tint text-sm font-semibold text-blue">
+                            {(p.firstName[0] ?? "") + (p.lastName[0] ?? "")}
+                          </span>
+                          <span className="min-w-0">
+                            <span className="block truncate text-sm font-medium text-ink">
+                              {p.lastName} {p.firstName}
+                            </span>
+                            <span className="block truncate text-xs text-muted">
+                              {p.position ? `${p.position} · ` : ""}
+                              {p.email}
+                            </span>
+                          </span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            removeParticipant(p.id);
+                            setSelectedParticipantIds((prev) => {
+                              const next = new Set(prev);
+                              next.delete(p.id);
+                              return next;
+                            });
+                          }}
+                          aria-label={`Удалить ${p.firstName} ${p.lastName} из списка`}
+                          className="shrink-0 text-muted transition-colors hover:text-ink"
+                        >
+                          <IconTrash className="h-4 w-4" />
+                        </button>
+                      </label>
+                    ))}
+
+                    {showAddParticipant ? (
+                      <div className="flex flex-col gap-3 rounded-lg border border-border p-4">
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          <input
+                            required
+                            value={participantForm.firstName}
+                            onChange={(e) => updateParticipantForm("firstName", e.target.value)}
+                            placeholder="Имя"
+                            aria-label="Имя"
+                            className="w-full rounded-lg border border-border bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-muted focus:border-blue"
+                          />
+                          <input
+                            required
+                            value={participantForm.lastName}
+                            onChange={(e) => updateParticipantForm("lastName", e.target.value)}
+                            placeholder="Фамилия"
+                            aria-label="Фамилия"
+                            className="w-full rounded-lg border border-border bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-muted focus:border-blue"
+                          />
+                        </div>
+                        <input
+                          value={participantForm.position}
+                          onChange={(e) => updateParticipantForm("position", e.target.value)}
+                          placeholder="Должность (необязательно)"
+                          aria-label="Должность"
+                          className="w-full rounded-lg border border-border bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-muted focus:border-blue"
+                        />
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          <input
+                            required
+                            type="email"
+                            value={participantForm.email}
+                            onChange={(e) => updateParticipantForm("email", e.target.value)}
+                            placeholder="Email"
+                            aria-label="Email"
+                            className="w-full rounded-lg border border-border bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-muted focus:border-blue"
+                          />
+                          <input
+                            required
+                            type="tel"
+                            value={participantForm.phone}
+                            onChange={(e) => updateParticipantForm("phone", e.target.value)}
+                            placeholder="Телефон"
+                            aria-label="Телефон"
+                            className="w-full rounded-lg border border-border bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-muted focus:border-blue"
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={handleAddParticipant}
+                            disabled={
+                              !participantForm.firstName.trim() ||
+                              !participantForm.lastName.trim() ||
+                              !participantForm.email.trim() ||
+                              !participantForm.phone.trim()
+                            }
+                            className="flex items-center gap-1.5 rounded-lg bg-blue px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-dark disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-blue"
+                          >
+                            Добавить
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setShowAddParticipant(false);
+                              setParticipantForm(emptyParticipantForm);
+                            }}
+                            className="rounded-lg border border-border px-4 py-2 text-sm text-ink transition-colors hover:border-blue hover:text-blue"
+                          >
+                            Отмена
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setShowAddParticipant(true)}
+                        className="flex items-center justify-center gap-2 rounded-lg border border-dashed border-border p-3 text-sm font-medium text-blue transition-colors hover:border-blue hover:bg-blue-tint/40"
+                      >
+                        <IconPlus className="h-4 w-4" />
+                        Добавить участника
+                      </button>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setStep("payment")}
+                    className="mt-2 flex items-center justify-center gap-2 self-start rounded-lg bg-blue px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-dark"
+                  >
+                    Продолжить
+                    <IconArrowRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+
+              <OrderSummary
+                items={items}
+                subtotal={total}
+                promo={promo}
+                promoInput={promoInput}
+                promoError={promoError}
+                onPromoInputChange={(value) => {
+                  setPromoInput(value);
+                  if (promoError) setPromoError("");
+                }}
+                onApplyPromo={applyPromo}
+                onRemovePromo={removePromo}
+              />
             </div>
           )}
 

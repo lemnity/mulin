@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Reveal } from "@/components/reveal";
 import {
   IconArrowRight,
   IconBuilding,
@@ -32,18 +33,19 @@ export function DirectionsGrid() {
         </Link>
       </div>
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {directions.map(({ label, icon: Icon, query }) => (
-          <Link
-            key={label}
-            href={query ? `/schedule?q=${encodeURIComponent(query)}#programs` : "/schedule"}
-            className="group flex items-center gap-3 rounded-xl border border-border bg-surface p-4 transition-colors hover:border-blue"
-          >
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-tint text-blue">
-              <Icon className="h-5 w-5" />
-            </span>
-            <span className="flex-1 text-sm font-medium text-ink">{label}</span>
-            <IconArrowRight className="h-4 w-4 shrink-0 text-muted transition-transform group-hover:translate-x-1 group-hover:text-blue" />
-          </Link>
+        {directions.map(({ label, icon: Icon, query }, i) => (
+          <Reveal key={label} delayMs={(i % 4) * 80}>
+            <Link
+              href={query ? `/schedule?q=${encodeURIComponent(query)}#programs` : "/schedule"}
+              className="group flex items-center gap-3 rounded-xl border border-border bg-surface p-4 transition-colors hover:border-blue"
+            >
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-tint text-blue">
+                <Icon className="h-5 w-5" />
+              </span>
+              <span className="flex-1 text-sm font-medium text-ink">{label}</span>
+              <IconArrowRight className="h-4 w-4 shrink-0 text-muted transition-transform group-hover:translate-x-1 group-hover:text-blue" />
+            </Link>
+          </Reveal>
         ))}
       </div>
     </section>

@@ -179,7 +179,7 @@ export default function CheckoutPage() {
     return (
       <>
         <SiteHeader />
-        <main className="flex-1">
+        <main id="main" className="flex-1">
           <div className="mx-auto max-w-7xl px-6 py-16 text-center lg:px-10">
             <p className="text-ink">Ваш заказ пока пуст — оформлять пока нечего.</p>
             <Link
@@ -200,7 +200,7 @@ export default function CheckoutPage() {
     <>
       <SiteHeader />
 
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         <div className="mx-auto max-w-7xl px-6 py-12 lg:px-10">
           {step !== "done" && (
             <>

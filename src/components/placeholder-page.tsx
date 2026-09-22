@@ -20,7 +20,7 @@ export function PlaceholderPage({
       <SiteHeader />
       <Breadcrumbs items={crumbs} />
 
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         <section className="bg-hero-band">
           <div className="mx-auto max-w-3xl px-6 py-14 text-center lg:px-10 lg:py-20">
             <h1 className="text-3xl font-extrabold leading-tight text-ink sm:text-4xl">{title}</h1>

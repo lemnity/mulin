@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/lib/cart-context";
-import { IconArrowRight, IconCart } from "@/components/icons";
+import { IconArrowRight, IconCart, IconX } from "@/components/icons";
 
 function formatPrice(price: number) {
   return `${new Intl.NumberFormat("ru-RU").format(price)} ₽`;
@@ -19,7 +19,7 @@ function pluralizePrograms(count: number) {
 
 export function CartFloatingBar() {
   const pathname = usePathname();
-  const { itemIds, total, bumpToken } = useCart();
+  const { itemIds, total, bumpToken, clear } = useCart();
 
   const hidden = pathname === "/cart" || pathname === "/checkout";
   const visible = !hidden && itemIds.length > 0;
@@ -31,7 +31,7 @@ export function CartFloatingBar() {
         visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"
       }`}
     >
-      <div className="flex max-w-full items-center gap-2 rounded-full border border-border bg-surface py-2 pl-2 pr-2.5 shadow-[0_8px_24px_rgba(16,24,40,0.14)] sm:gap-4 sm:pl-4">
+      <div className="flex max-w-full items-center gap-2 rounded-full border border-border bg-surface py-2 pl-2 pr-2 shadow-[0_8px_24px_rgba(16,24,40,0.14)] sm:gap-4 sm:pl-4">
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-tint text-blue">
           <IconCart className="h-4 w-4" />
         </span>
@@ -54,6 +54,16 @@ export function CartFloatingBar() {
           <span className="sm:hidden">Оформить</span>
           <IconArrowRight className="h-4 w-4" />
         </Link>
+
+        <button
+          type="button"
+          onClick={clear}
+          aria-label="Убрать все программы из заказа"
+          title="Убрать все"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-page hover:text-ink"
+        >
+          <IconX className="h-4 w-4" />
+        </button>
       </div>
     </div>
   );

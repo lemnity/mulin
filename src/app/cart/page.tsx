@@ -24,7 +24,7 @@ export default function CartPage() {
     <>
       <SiteHeader />
 
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         <div className="mx-auto max-w-7xl px-6 py-12 lg:px-10">
           <h1 className="text-3xl font-extrabold leading-tight text-ink sm:text-4xl">
             {orderLabel(items.length)}

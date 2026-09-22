@@ -1,27 +1,34 @@
+import Image from "next/image";
 import Link from "next/link";
-import { SpeakerCard } from "@/components/speaker-card";
+import { Reveal } from "@/components/reveal";
 import { IconArrowRight } from "@/components/icons";
 
-const lecturers = [
+function initialsOf(lastName: string, firstMiddle: string) {
+  return `${lastName[0] ?? ""}${firstMiddle[0] ?? ""}`.toUpperCase();
+}
+
+type Lecturer = { lastName: string; firstMiddle: string; bio: string; photo?: string };
+
+const lecturers: Lecturer[] = [
   {
-    name: "Вихляева Елена Николаевна",
-    role: "Налоговый консультант",
-    bio: "Эксперт-практик с более чем 15-летним опытом. Специализируется на вопросах НДС и бухгалтерского учёта.",
+    lastName: "Вихляева",
+    firstMiddle: "Елена Николаевна",
+    bio: "Налоговый консультант, эксперт-практик. Более 15 лет опыта.",
   },
   {
-    name: "Гейц Игорь Викторович",
-    role: "Эксперт по кадровому делопроизводству",
-    bio: "Практикующий консультант по трудовому праву и охране труда. Помогает выстраивать процессы без штрафов и споров.",
+    lastName: "Гейц",
+    firstMiddle: "Игорь Викторович",
+    bio: "Эксперт по кадровому делопроизводству. Консультант по трудовому праву и охране труда.",
   },
   {
-    name: "Затагина Виктория Вячеславовна",
-    role: "Специалист по финансам и валютному контролю",
-    bio: "Специализируется на банковском регулировании и налогообложении малого бизнеса. Автор методических материалов.",
+    lastName: "Затагина",
+    firstMiddle: "Виктория Вячеславовна",
+    bio: "Специалист по финансовому учёту и отчётности. Автор методических материалов.",
   },
   {
-    name: "Горовенко Сергей Викторович",
-    role: "Юрист-практик",
-    bio: "Ведёт договорную и претензионную работу, представляет интересы бизнеса в судах.",
+    lastName: "Смирнов",
+    firstMiddle: "Алексей Павлович",
+    bio: "Эксперт в сфере государственных закупок. Практикующий консультант.",
   },
 ];
 
@@ -35,17 +42,42 @@ export function LecturersSection() {
         </Link>
       </div>
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {lecturers.map((l) => (
-          <Link
-            key={l.name}
-            href="/about/teachers"
-            className="group flex flex-col rounded-xl border border-border bg-surface p-5 transition-colors hover:border-blue"
-          >
-            <SpeakerCard name={l.name} bio={`${l.role}. ${l.bio}`} />
-            <span className="mt-4 flex justify-end">
-              <IconArrowRight className="h-4 w-4 text-blue transition-transform group-hover:translate-x-1" />
-            </span>
-          </Link>
+        {lecturers.map(({ lastName, firstMiddle, bio, photo }, i) => (
+          <Reveal key={lastName} delayMs={(i % 4) * 80}>
+            <Link
+              href="/about/teachers"
+              className="group flex h-full flex-col rounded-xl border border-border bg-surface p-5 transition-colors hover:border-blue"
+            >
+              <div className="flex items-start gap-3">
+                {photo ? (
+                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full">
+                    <Image
+                      src={photo}
+                      alt={`${lastName} ${firstMiddle}`}
+                      fill
+                      sizes="64px"
+                      className="object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-blue-tint text-lg font-semibold text-blue">
+                    {initialsOf(lastName, firstMiddle)}
+                  </div>
+                )}
+                <p className="pt-1 font-bold leading-snug text-ink">
+                  {lastName}
+                  <br />
+                  {firstMiddle}
+                </p>
+              </div>
+              <p className="mt-3 text-sm leading-relaxed text-muted">{bio}</p>
+              <span className="mt-auto flex justify-end pt-4">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-tint text-blue transition-colors group-hover:bg-blue group-hover:text-white">
+                  <IconArrowRight className="h-4 w-4" />
+                </span>
+              </span>
+            </Link>
+          </Reveal>
         ))}
       </div>
     </section>

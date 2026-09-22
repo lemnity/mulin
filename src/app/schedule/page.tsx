@@ -18,7 +18,7 @@ export default function SchedulePage() {
     <>
       <SiteHeader />
 
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         <section className="bg-hero-band">
           <div className="mx-auto max-w-7xl px-6 py-12 lg:px-10 lg:py-16">
             <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">

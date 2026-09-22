@@ -1,4 +1,4 @@
-type IconProps = {
+export type IconProps = {
   className?: string;
 };
 
@@ -368,6 +368,138 @@ export function IconGraduationCap({ className }: IconProps) {
     <svg viewBox="0 0 20 20" className={className} {...base}>
       <path d="M2 7.5 10 4l8 3.5-8 3.5-8-3.5Z" />
       <path d="M5.5 9.3v3.4c0 1.2 2 2.3 4.5 2.3s4.5-1.1 4.5-2.3V9.3M17 7.5V13" />
+    </svg>
+  );
+}
+
+export function IconDiamond({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <path d="M10 2.5 15.5 7.5 10 17.5 4.5 7.5Z" />
+      <path d="M4.5 7.5h11M7.3 7.5 10 2.5l2.7 5" />
+    </svg>
+  );
+}
+
+export function IconTeam({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <circle cx="6.5" cy="6.8" r="2.2" />
+      <circle cx="13.5" cy="6.8" r="2.2" />
+      <circle cx="10" cy="6" r="2.6" />
+      <path d="M2.3 16.5c.5-2.9 2.3-4.3 4.2-4.3.9 0 1.7.3 2.4.9" />
+      <path d="M17.7 16.5c-.5-2.9-2.3-4.3-4.2-4.3-.9 0-1.7.3-2.4.9" />
+      <path d="M5.8 17c.7-3 2.1-4.6 4.2-4.6s3.5 1.6 4.2 4.6" />
+    </svg>
+  );
+}
+
+export function IconDocumentLines({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <path d="M5 2.5h6.5L16 7v10.5H5V2.5Z" />
+      <path d="M11.5 2.5V7H16" />
+      <path d="M7 10.5h6M7 13h6M7 15.5h3.5" />
+    </svg>
+  );
+}
+
+export function IconLaptop({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <rect x="4.5" y="3.5" width="11" height="8" rx="1" />
+      <path d="M2 15.5h16l-1.3-2.5h-13.4Z" />
+    </svg>
+  );
+}
+
+export function IconX({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <path d="M5 5l10 10M15 5 5 15" />
+    </svg>
+  );
+}
+
+export function IconEye({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <path d="M2 10s3-5.5 8-5.5S18 10 18 10s-3 5.5-8 5.5S2 10 2 10Z" />
+      <circle cx="10" cy="10" r="2.4" />
+    </svg>
+  );
+}
+
+export function IconMenu({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <path d="M3 5.5h14M3 10h14M3 14.5h14" />
+    </svg>
+  );
+}
+
+/* Бренд-иконки соцсетей: заливка, а не обводка, как в официальных знаках. */
+
+export function IconVk({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M10.5 15.2c-5 0-7.9-3.4-8-9.2h2.6c.1 4.2 2 6 3.4 6.4V6h2.5v3.6c1.4-.2 2.9-1.8 3.4-3.6h2.4c-.4 2.2-2 3.8-3.1 4.5 1.1.5 3 1.9 3.7 4.7h-2.7c-.6-1.8-2-3.2-3.7-3.4v3.4h-.3Z" />
+    </svg>
+  );
+}
+
+export function IconTelegram({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} fill="currentColor" aria-hidden="true">
+      <path d="m3 9.8 13.4-5c.6-.2 1.2.2 1 1l-2.3 11c-.2.8-.7 1-1.3.6l-3.6-2.7-1.7 1.7c-.2.2-.4.3-.7.3l.2-3.6 6.6-6-8.2 5.1-3.2-1c-.7-.2-.7-1 .2-1.4Z" />
+    </svg>
+  );
+}
+
+export function IconExternal({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <path d="M11 3.5h5.5V9M16.5 3.5 9 11M8 5H4.5v10.5H15V12" />
+    </svg>
+  );
+}
+
+export function IconMax({ className }: IconProps) {
+  /* Пузырь сообщения с вырезанной буквой M — знак мессенджера MAX в одноцветном исполнении. */
+  return (
+    <svg viewBox="0 0 20 20" className={className} fill="currentColor" aria-hidden="true">
+      <path
+        fillRule="evenodd"
+        d="M10 1.8c4.6 0 8.2 3.3 8.2 7.6 0 4.2-3.6 7.5-8.2 7.5-.7 0-1.4-.1-2-.2L4.3 18.3c-.5.3-1.1-.1-1-.7l.4-2.6C2.4 13.7 1.8 12 1.8 9.4c0-4.3 3.6-7.6 8.2-7.6ZM5.9 12.6c0 .5.4.9.9.9s.9-.4.9-.9V9.3l1.6 2c.4.5 1.1.5 1.5 0l1.6-2v3.3c0 .5.4.9.9.9s.9-.4.9-.9V6.9c0-.9-1.1-1.3-1.7-.6L10 9.4 7.5 6.3c-.6-.7-1.6-.3-1.6.6v5.7Z"
+      />
+    </svg>
+  );
+}
+
+export function IconYoutube({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M17.6 6.2c-.2-.7-.7-1.2-1.4-1.4C15 4.5 10 4.5 10 4.5s-5 0-6.2.3c-.7.2-1.2.7-1.4 1.4C2.1 7.4 2.1 10 2.1 10s0 2.6.3 3.8c.2.7.7 1.2 1.4 1.4 1.2.3 6.2.3 6.2.3s5 0 6.2-.3c.7-.2 1.2-.7 1.4-1.4.3-1.2.3-3.8.3-3.8s0-2.6-.3-3.8ZM8.4 12.4V7.6l4.1 2.4-4.1 2.4Z" />
+    </svg>
+  );
+}
+
+export function IconSliders({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <path d="M3 6h9M15 6h2M3 14h2M8 14h9" />
+      <circle cx="13.5" cy="6" r="1.8" />
+      <circle cx="6.5" cy="14" r="1.8" />
+    </svg>
+  );
+}
+
+export function IconTrendUp({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <path d="M3 13.5 8 8.5l3 3 5.5-5.5" />
+      <path d="M12.5 6h4v4" />
+      <path d="M3 17h14" />
     </svg>
   );
 }

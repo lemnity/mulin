@@ -14,6 +14,9 @@
   --blue-dark: #1552b0;
   --blue-tint: #e5eefd;
 
+  --gold: #f2b21b;
+  --gold-dark: #d99a0b;
+
   --green-tint: #ddf3e4;
   --green-text: #189652;
 
@@ -39,6 +42,9 @@
   --color-blue-dark: var(--blue-dark);
   --color-blue-tint: var(--blue-tint);
 
+  --color-gold: var(--gold);
+  --color-gold-dark: var(--gold-dark);
+
   --color-green-tint: var(--green-tint);
   --color-green-text: var(--green-text);
 
@@ -48,6 +54,10 @@
   --color-footer-bg: var(--footer-bg);
   --color-footer-text: var(--footer-text);
   --color-footer-line: var(--footer-line);
+
+  /* Шапка: адрес в верхней полосе с 1400, увеличенные размеры с 1800 */
+  --breakpoint-wide: 87.5rem;
+  --breakpoint-3xl: 112.5rem;
 
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
@@ -70,6 +80,80 @@ body {
 
 .tabular {
   font-variant-numeric: tabular-nums;
+}
+
+/* Скрыть визуально, оставить для читалок (ссылка «К содержанию»). */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100%;
+  z-index: 100;
+  border-radius: 0.5rem;
+  background: var(--blue);
+  color: #fff;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.skip-link:focus-visible {
+  top: 0.75rem;
+  outline-color: var(--ink);
+}
+
+/* Версия для слабовидящих: крупнее текст, подчёркнутые ссылки, ч/б изображения.
+   Фильтр стоит на картинках, а не на html: фильтр на корне сделал бы его containing
+   block для fixed-элементов, и плавающая корзина уехала бы к низу документа. */
+html[data-vision="on"] {
+  font-size: 118%;
+}
+html[data-vision="on"] body {
+  background: #fff;
+  color: #000;
+}
+html[data-vision="on"] a:not([class*="bg-blue"]) {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+html[data-vision="on"] img,
+html[data-vision="on"] video,
+html[data-vision="on"] picture {
+  filter: grayscale(1) contrast(1.15);
+}
+/* Второстепенные блоки шапки, которым при крупном шрифте не хватает ширины. */
+html[data-vision="on"] [data-vision-hide] {
+  display: none !important;
+}
+/* Верхняя полоса при крупном шрифте переносится на две строки, а не обрезается. */
+html[data-vision="on"] [data-vision-wrap] {
+  height: auto;
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+html[data-vision="on"] * {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Выпадающие панели шапки: проявление со сдвигом вниз. Анимация стоит на панели,
+   а не на <details>, потому что содержимое details появляется мгновенно. */
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Центрирование панели задаётся классом -translate-x-1/2 (свойство `translate`), а анимация
+   двигает `transform` — это разные свойства, они складываются, поэтому в keyframes сдвига
+   по X быть НЕ должно: иначе панель уезжает на половину ширины влево. */
+.menu-panel {
+  animation: menu-in 0.18s ease-out both;
+  transform-origin: top center;
 }
 
 @keyframes cart-bump {

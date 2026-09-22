@@ -55,7 +55,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
         ]}
       />
 
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         <ProgramHero program={program} detail={detail} />
         <ProgramTabs />
 

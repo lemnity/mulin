@@ -58,12 +58,12 @@ export function ParticipationSidebar({
         >
           {inCart ? (
             <>
-              Вы записаны
+              В заказе
               <IconCheck className="h-4 w-4" />
             </>
           ) : (
             <>
-              Записаться на {program.type === "Курс" ? "курс" : program.type === "Семинар" ? "семинар" : "вебинар"}
+              Выбрать {program.type === "Курс" ? "курс" : program.type === "Семинар" ? "семинар" : "вебинар"}
               <IconArrowRight className="h-4 w-4" />
             </>
           )}

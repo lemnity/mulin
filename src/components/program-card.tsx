@@ -94,11 +94,11 @@ export function ProgramCard({
         >
           {inCart ? (
             <>
-              В корзине
+              В заказе
               <IconCheck className="h-3.5 w-3.5" />
             </>
           ) : (
-            "Записаться"
+            "Выбрать"
           )}
         </button>
       </div>

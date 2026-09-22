@@ -134,12 +134,12 @@ export function ProgramRow({
           >
             {inCart ? (
               <>
-                В корзине
+                В заказе
                 <IconCheck className="h-4 w-4" />
               </>
             ) : (
               <>
-                Записаться
+                Выбрать
                 <IconArrowRight className="h-4 w-4" />
               </>
             )}

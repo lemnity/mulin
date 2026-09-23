@@ -17,7 +17,7 @@ export function FilterDropdown({
   return (
     <details name="schedule-filters" className="group relative">
       <summary
-        className={`flex cursor-pointer list-none items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors [&::-webkit-details-marker]:hidden ${
+        className={`flex cursor-pointer list-none items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors [&::-webkit-details-marker]:hidden focus-visible:outline-1! focus-visible:outline-offset-1! ${
           count > 0
             ? "bg-blue-tint text-blue"
             : "bg-surface text-ink/80 ring-1 ring-inset ring-border hover:text-ink"

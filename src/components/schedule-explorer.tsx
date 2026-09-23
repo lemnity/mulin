@@ -51,12 +51,20 @@ export function ScheduleExplorer() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") ?? "";
 
+  // Значения из ссылки (например, с главной страницы) — используются только как
+  // начальное состояние один раз при монтировании; дальше фильтрами управляет панель.
   const [types, setTypes] = useState<ReadonlySet<ProgramType>>(new Set());
-  const [formats, setFormats] = useState<ReadonlySet<ProgramFormat>>(new Set());
+  const [formats, setFormats] = useState<ReadonlySet<ProgramFormat>>(() => {
+    const f = searchParams.get("format");
+    return f ? new Set([f as ProgramFormat]) : new Set();
+  });
   const [audiences, setAudiences] = useState<ReadonlySet<string>>(new Set());
-  const [speakers, setSpeakers] = useState<ReadonlySet<string>>(new Set());
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo] = useState("");
+  const [speakers, setSpeakers] = useState<ReadonlySet<string>>(() => {
+    const s = searchParams.get("speaker");
+    return s ? new Set([s]) : new Set();
+  });
+  const [dateFrom, setDateFrom] = useState(() => searchParams.get("dateFrom") ?? "");
+  const [dateTo, setDateTo] = useState(() => searchParams.get("dateTo") ?? "");
   const [sort, setSort] = useState<SortKey>("date-asc");
   const [view, setView] = useState<"list" | "grid">("list");
   const [page, setPage] = useState(1);

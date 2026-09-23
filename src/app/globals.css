@@ -82,6 +82,11 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* Поле внутри составного контрола: фокус показывает обёртка, своя рамка не нужна. */
+.focus-quiet:focus-visible {
+  outline: none;
+}
+
 /* Скрыть визуально, оставить для читалок (ссылка «К содержанию»). */
 .skip-link {
   position: absolute;

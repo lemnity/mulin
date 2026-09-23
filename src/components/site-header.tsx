@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -270,7 +270,11 @@ function UtilityBar() {
 function CartLink({ compact = false, className = "" }: { compact?: boolean; className?: string }) {
   const { itemIds, bumpToken } = useCart();
   const count = itemIds.length;
-  const justAdded = bumpToken > 0;
+  /* Счётчик добавлений живёт в модуле и переживает переходы между страницами, а шапка
+     на каждой странице монтируется заново. Сравниваем с тем, что было на монтировании,
+     иначе «Добавлено» всплывало бы при каждом переходе. */
+  const [tokenAtMount] = useState(bumpToken);
+  const justAdded = bumpToken > tokenAtMount;
 
   return (
     <Link

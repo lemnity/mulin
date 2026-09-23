@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { speakerRoster } from "@/lib/programs";
 import { IconChevronDown, IconSearch, IconSliders } from "@/components/icons";
+import { beginPageTransition } from "@/components/page-loader";
 
 const popularQueries = [
   "НДС",
@@ -57,7 +58,9 @@ export function HomeSearchBand() {
 
   function goToSchedule(q: string) {
     const trimmed = q.trim();
-    router.push(trimmed ? `/schedule?q=${encodeURIComponent(trimmed)}#programs` : "/schedule#programs");
+    const href = trimmed ? `/schedule?q=${encodeURIComponent(trimmed)}#programs` : "/schedule#programs";
+    beginPageTransition(href);
+    router.push(href);
   }
 
   function handleSubmit(e: React.FormEvent) {

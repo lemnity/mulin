@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { IconArrowRight, IconSearch, IconX } from "@/components/icons";
+import { beginPageTransition } from "@/components/page-loader";
 
 const PLACEHOLDER = "Поиск по названию, теме или лектору";
 
@@ -50,7 +51,9 @@ export function HeaderSearch({
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     setOpen(false);
-    router.push(searchHref(value));
+    const href = searchHref(value);
+    beginPageTransition(href);
+    router.push(href);
   };
 
   const form = (

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { CartProvider } from "@/lib/cart-context";
 import { CartFloatingBar } from "@/components/cart-floating-bar";
+import { RouteTransitionLoader } from "@/components/page-loader";
 import "./globals.css";
+import "./page-loader.css";
 
 export const metadata: Metadata = {
   title: "Программы и расписание — Дом науки и техники",
@@ -16,6 +18,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <CartProvider>
           {children}
           <CartFloatingBar />
+          <RouteTransitionLoader />
         </CartProvider>
       </body>
     </html>

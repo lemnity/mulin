@@ -1,3 +1,6 @@
+import Image from "next/image";
+import ipbLogo from "../../public/ipb-logo.png";
+
 /**
  * Фирменный знак «Дом науки и техники»: две синие «грани» и жёлтое основание.
  * Рисуется SVG, чтобы масштабироваться без потерь и краситься через currentColor.
@@ -39,41 +42,19 @@ export function LogoLockup({
   );
 }
 
-/** Эмблема ИПБ: жёлтое кольцо и синий «взлёт» птицы внутри. */
-export function IpbEmblem({ className = "h-14 w-14" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 56 56" className={className} aria-hidden="true">
-      <circle cx="28" cy="28" r="25" fill="#fff" stroke="var(--gold)" strokeWidth="4" />
-      <circle cx="28" cy="28" r="20" fill="none" stroke="var(--blue)" strokeWidth="1.2" opacity="0.35" />
-      <path
-        fill="var(--blue)"
-        d="M14 34c6.2-1.6 11-5.4 14.6-11.3 1.6-2.6 3.6-4.6 6.6-5.7-1.2 3.4-2.9 6.2-5.3 8.6 4.2-1 8.3-.3 12.1 2.1-5.6 1.4-10.6 4.2-14.8 8.3-3.6 3.6-8.4 5-13.2 4.2Z"
-      />
-      <path fill="var(--gold)" d="M31.3 20.6c1.5-1.5 3.2-2.4 5.3-2.9-.6 2-1.6 3.7-3 5.1-.8-.8-1.6-1.5-2.3-2.2Z" />
-    </svg>
-  );
-}
-
-/** Блок «Группа компаний» рядом с основным логотипом в шапке. */
+/** Блок «Группа компаний» рядом с основным логотипом в шапке: подпись + фирменный знак ИПБ. */
 export function IpbLockup() {
   return (
-    <span className="inline-flex flex-col gap-1">
+    <span className="inline-flex flex-col gap-1.5">
       <span className="text-[0.58rem] font-bold uppercase tracking-[0.07em] text-ink 3xl:text-[0.66rem]">
         Группа компаний
       </span>
-      <span className="inline-flex items-center gap-1.5 3xl:gap-2">
-        <IpbEmblem className="h-10 w-10 shrink-0 3xl:h-13 3xl:w-13" />
-        <span className="flex flex-col leading-none">
-          <span className="text-[0.44rem] font-bold uppercase tracking-[0.04em] text-blue 3xl:text-[0.52rem]">
-            Тюменский территориальный институт
-          </span>
-          <span className="mt-0.5 text-[0.68rem] font-extrabold uppercase leading-[1.05] tracking-tight text-gold-dark 3xl:mt-1 3xl:text-[0.86rem]">
-            Профессиональных
-            <br />
-            бухгалтеров
-          </span>
-        </span>
-      </span>
+      <Image
+        src={ipbLogo}
+        alt="Тюменский территориальный институт профессиональных бухгалтеров"
+        className="h-10 w-auto 3xl:h-12"
+        priority
+      />
     </span>
   );
 }

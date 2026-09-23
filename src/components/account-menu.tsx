@@ -126,9 +126,9 @@ export function AccountMenu({ className = "" }: { className?: string }) {
           </Link>
           <Link
             href="/"
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-ink transition-colors hover:bg-page hover:text-blue"
+            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-red-600 transition-colors hover:bg-red-50 hover:text-red-700"
           >
-            <IconLogout className="h-4.5 w-4.5 text-muted" />
+            <IconLogout className="h-4.5 w-4.5 text-red-600" />
             Выйти из профиля
           </Link>
         </div>

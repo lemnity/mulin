@@ -31,6 +31,7 @@ import {
   type IconProps,
 } from "@/components/icons";
 import { IpbLockup, LogoLockup } from "@/components/logo";
+import { AccountMenu } from "@/components/account-menu";
 import { HeaderSearch } from "@/components/header-search";
 import { VisionModeToggle } from "@/components/vision-mode-toggle";
 import { orderLabel, useCart } from "@/lib/cart-context";
@@ -439,16 +440,7 @@ function PhoneIconButton() {
 }
 
 function AccountButton() {
-  return (
-    <Link
-      href="/account"
-      aria-label="Личный кабинет"
-      className="hidden h-10 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-blue px-4 text-[0.875rem] font-medium text-white transition-colors hover:bg-blue-dark sm:flex 3xl:h-11 3xl:px-5 3xl:text-[0.95rem]"
-    >
-      <IconUserCircle className="h-4.5 w-4.5 shrink-0" />
-      Личный кабинет
-    </Link>
-  );
+  return <AccountMenu className="hidden sm:block" />;
 }
 
 /* ---------- Мобильное меню ---------- */

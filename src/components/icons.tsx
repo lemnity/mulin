@@ -503,3 +503,13 @@ export function IconTrendUp({ className }: IconProps) {
     </svg>
   );
 }
+
+export function IconLogout({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} {...base}>
+      <path d="M8 3.5H4.5v13H8" />
+      <path d="M12 6.5 15.5 10 12 13.5" />
+      <path d="M15.5 10H7.5" />
+    </svg>
+  );
+}

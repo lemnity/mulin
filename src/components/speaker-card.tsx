@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { assetPath } from "@/lib/asset-path";
 
 function initialsOf(name: string) {
   return name
@@ -22,7 +23,7 @@ export function SpeakerCard({
     <div className="flex gap-4">
       {photo ? (
         <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full">
-          <Image src={photo} alt={name} fill sizes="64px" className="object-cover" />
+          <Image src={assetPath(photo)} alt={name} fill sizes="64px" className="object-cover" />
         </div>
       ) : (
         <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-blue-tint text-lg font-semibold text-blue">

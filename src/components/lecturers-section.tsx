@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { assetPath } from "@/lib/asset-path";
 import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { IconArrowRight, IconCalendar } from "@/components/icons";
@@ -54,7 +55,7 @@ export function LecturersSection() {
                   {l.photo ? (
                     <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full ring-1 ring-inset ring-border">
                       <Image
-                        src={l.photo}
+                        src={assetPath(l.photo)}
                         alt={l.name}
                         fill
                         sizes="64px"

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { assetPath } from "@/lib/asset-path";
 import Link from "next/link";
 import { IconArrowRight, IconMonitor, IconPin } from "@/components/icons";
 import type { Lecturer, LecturerProgram } from "@/lib/lecturers";
@@ -29,7 +30,7 @@ export function LecturerAvatar({
       <div
         className={`relative aspect-square shrink-0 overflow-hidden rounded-full ring-1 ring-inset ring-border ${className}`}
       >
-        <Image src={lecturer.photo} alt={lecturer.name} fill sizes="128px" className="object-cover object-top" />
+        <Image src={assetPath(lecturer.photo)} alt={lecturer.name} fill sizes="128px" className="object-cover object-top" />
       </div>
     );
   }

@@ -16,7 +16,6 @@ import {
   IconExternal,
   IconGraduationCap,
   IconLaptop,
-  IconMax,
   IconMenu,
   IconMonitor,
   IconPhone,
@@ -24,12 +23,11 @@ import {
   IconScale,
   IconShield,
   IconTarget,
-  IconTelegram,
   IconUserCircle,
   IconUsers,
-  IconVk,
   type IconProps,
 } from "@/components/icons";
+import { SocialLinks } from "@/components/social-links";
 import { IpbLockup, LogoLockup } from "@/components/logo";
 import { AccountMenu } from "@/components/account-menu";
 import { HeaderSearch } from "@/components/header-search";
@@ -61,12 +59,6 @@ const utilityLinks: { label: string; href: string; external?: boolean }[] = [
   { label: "Вопросы и ответы", href: "/faq" },
   { label: "Контакты", href: "/contacts" },
   { label: "Старая версия сайта", href: OLD_SITE_URL, external: true },
-];
-
-const socialLinks: { label: string; href: string; icon: Icon }[] = [
-  { label: "ВКонтакте", href: "#", icon: IconVk },
-  { label: "Telegram", href: "#", icon: IconTelegram },
-  { label: "MAX", href: "#", icon: IconMax },
 ];
 
 /* Основное меню: Обучение ▾ · Расписание · О центре ▾ · Услуги ▾.
@@ -172,20 +164,7 @@ function isNavItemActive(pathname: string, item: NavItem) {
 /* ---------- Верхняя полоса ---------- */
 
 function SocialButtons({ size = "h-7 w-7" }: { size?: string }) {
-  return (
-    <div className="flex items-center gap-1.5">
-      {socialLinks.map(({ label, href, icon: SocialIcon }) => (
-        <a
-          key={label}
-          href={href}
-          aria-label={label}
-          className={`flex ${size} cursor-pointer items-center justify-center rounded-lg bg-ink text-white transition-colors hover:bg-blue`}
-        >
-          <SocialIcon className="h-3.5 w-3.5" />
-        </a>
-      ))}
-    </div>
-  );
+  return <SocialLinks size={size} />;
 }
 
 /** Английская версия ещё не готова: кнопка видна, но неактивна и честно говорит «скоро». */
@@ -327,7 +306,7 @@ function MegaMenuPanel({ columns, promo }: { columns: NavColumn[]; promo?: NavPr
                 <Link
                   key={child.href}
                   href={child.href}
-                  className="group/link flex items-center gap-2.5 rounded-lg px-2 py-2 text-sm text-ink/85 transition-colors hover:bg-blue-tint hover:text-blue"
+                  className="group/link flex items-center gap-2.5 rounded-lg px-2 py-2 text-sm text-ink transition-colors hover:bg-blue-tint hover:text-blue"
                 >
                   {child.icon && (
                     <child.icon className="h-4 w-4 shrink-0 text-muted transition-colors group-hover/link:text-blue" />
@@ -397,7 +376,7 @@ function DesktopNavLink({ item, active }: { item: NavItem; active: boolean }) {
             <Link
               key={child.href}
               href={child.href}
-              className="group/link flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm text-ink/85 transition-colors hover:bg-blue-tint hover:text-blue"
+              className="group/link flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm text-ink transition-colors hover:bg-blue-tint hover:text-blue"
             >
               {child.icon && (
                 <child.icon className="h-4 w-4 shrink-0 text-muted transition-colors group-hover/link:text-blue" />
@@ -452,7 +431,7 @@ function MobileNavLink({ item, active }: { item: NavItem; active: boolean }) {
         href={item.href!}
         aria-current={active ? "page" : undefined}
         className={`block rounded-md px-3 py-2.5 text-[0.95rem] ${
-          active ? "font-medium text-blue" : "text-ink/85 hover:text-ink"
+          active ? "font-medium text-blue" : "text-ink hover:text-ink"
         }`}
       >
         {item.label}
@@ -462,7 +441,7 @@ function MobileNavLink({ item, active }: { item: NavItem; active: boolean }) {
 
   return (
     <details className="group/sub">
-      <summary className="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2.5 text-[0.95rem] text-ink/85 [&::-webkit-details-marker]:hidden">
+      <summary className="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2.5 text-[0.95rem] text-ink [&::-webkit-details-marker]:hidden">
         {item.label}
         <IconChevronDown className="h-3.5 w-3.5 text-muted transition-transform group-open/sub:rotate-180" />
       </summary>
@@ -475,7 +454,7 @@ function MobileNavLink({ item, active }: { item: NavItem; active: boolean }) {
                   <Link
                     key={child.href}
                     href={child.href}
-                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-ink/75 hover:text-ink"
+                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-ink hover:text-ink"
                   >
                     {child.icon && <child.icon className="h-4 w-4 shrink-0 text-muted" />}
                     {child.label}
@@ -487,7 +466,7 @@ function MobileNavLink({ item, active }: { item: NavItem; active: boolean }) {
               <Link
                 key={child.href}
                 href={child.href}
-                className="block rounded-md px-3 py-2 text-sm text-ink/75 hover:text-ink"
+                className="block rounded-md px-3 py-2 text-sm text-ink hover:text-ink"
               >
                 {child.label}
               </Link>
@@ -527,7 +506,7 @@ function MobileMenu({ pathname }: { pathname: string }) {
             {PHONE_DISPLAY}
           </a>
           <p className="ml-6.5 text-xs text-body">Звонок по России бесплатный</p>
-          <p className="mt-3 flex items-start gap-2 text-sm text-ink/85">
+          <p className="mt-3 flex items-start gap-2 text-sm text-ink">
             <IconPin className="mt-0.5 h-4.5 w-4.5 shrink-0 text-blue" />
             {ADDRESS}
           </p>

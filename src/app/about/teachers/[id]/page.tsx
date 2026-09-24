@@ -86,7 +86,7 @@ export default async function LecturerPage({ params }: { params: Promise<{ id: s
                   className="inline-flex items-center gap-2 rounded-lg bg-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-dark"
                 >
                   <IconPhone className="h-4 w-4" />
-                  Позвонить
+                  Уточнить у оператора
                 </a>
                 <Link
                   href="/schedule#programs"

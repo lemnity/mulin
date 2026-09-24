@@ -37,61 +37,81 @@ function LecturerCard({ l }: { l: Lecturer }) {
       </div>
 
       <div className="min-w-0 flex-1 sm:border-l sm:border-border sm:pl-6">
-        {l.programs.length > 0 ? (
-          <>
-            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted">
-              <IconCalendar className="h-4 w-4 text-blue" />
-              Ближайшие семинары
-              <span className="tabular rounded-full bg-blue-tint px-2 py-0.5 text-[0.7rem] font-semibold text-blue">
-                {l.programs.length}
-              </span>
-            </p>
-            <ul className="mt-3 flex flex-col gap-2">
-              {preview.map((p) => (
-                <ProgramRow key={p.id} p={p} />
-              ))}
-            </ul>
-            {rest > 0 && (
-              <Link
-                href={`/about/teachers/${l.id}`}
-                className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-sm font-medium text-blue transition-colors hover:border-blue hover:bg-blue-tint"
-              >
-                Посмотреть все семинары ({l.programs.length})
-                <IconArrowRight className="h-4 w-4" />
-              </Link>
-            )}
-          </>
-        ) : (
-          <div className="flex h-full flex-col items-start justify-center">
-            <p className="text-sm text-muted">
-              Нет ближайших семинаров. Подпишитесь на канал в ВКонтакте или MAX, чтобы не пропустить
-              новую дату, либо уточните у оператора.
-            </p>
-            <div className="mt-3 flex flex-wrap items-center gap-3">
-              <a
-                href="tel:88002504191"
-                className="inline-flex items-center gap-1.5 rounded-lg bg-blue px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-dark"
-              >
-                <IconPhone className="h-4 w-4" />
-                Позвонить
-              </a>
-              <Link
-                href={`/about/teachers/${l.id}`}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-blue hover:text-blue-dark"
-              >
-                О преподавателе
-                <IconArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
+        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted">
+          <IconCalendar className="h-4 w-4 text-blue" />
+          Ближайшие семинары
+          <span className="tabular rounded-full bg-blue-tint px-2 py-0.5 text-[0.7rem] font-semibold text-blue">
+            {l.programs.length}
+          </span>
+        </p>
+        <ul className="mt-3 flex flex-col gap-2">
+          {preview.map((p) => (
+            <ProgramRow key={p.id} p={p} />
+          ))}
+        </ul>
+        {rest > 0 && (
+          <Link
+            href={`/about/teachers/${l.id}`}
+            className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-sm font-medium text-blue transition-colors hover:border-blue hover:bg-blue-tint"
+          >
+            Посмотреть все семинары ({l.programs.length})
+            <IconArrowRight className="h-4 w-4" />
+          </Link>
         )}
       </div>
     </article>
   );
 }
 
+/** Компактная карточка преподавателя без ближайших семинаров — для сетки. */
+function CompactLecturerCard({ l }: { l: Lecturer }) {
+  return (
+    <article className="flex h-full flex-col rounded-2xl border border-border bg-surface p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-colors hover:border-blue/40">
+      <div className="flex flex-1 items-start gap-4">
+        <Link href={`/about/teachers/${l.id}`} className="shrink-0">
+          <LecturerAvatar lecturer={l} className="w-20" />
+        </Link>
+        <div className="min-w-0">
+          <h3 className="text-[0.95rem] font-bold leading-snug text-ink">
+            <Link href={`/about/teachers/${l.id}`} className="hover:text-blue">
+              {l.name}
+            </Link>
+          </h3>
+          <p className="mt-1.5 line-clamp-4 text-sm leading-relaxed text-body">{l.bio}</p>
+        </div>
+      </div>
+
+      <div className="mt-5 flex items-center justify-between gap-3 border-t border-border pt-4">
+        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted">
+          <IconCalendar className="h-3.5 w-3.5" />
+          Даты уточняются
+        </span>
+        <div className="flex items-center gap-1">
+          <a
+            href="tel:88002504191"
+            aria-label={`Позвонить и уточнить даты: ${l.name}`}
+            title="Уточнить у оператора"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-blue transition-colors hover:bg-blue-tint"
+          >
+            <IconPhone className="h-4 w-4" />
+          </a>
+          <Link
+            href={`/about/teachers/${l.id}`}
+            className="inline-flex items-center gap-1 rounded-lg px-2.5 py-2 text-sm font-medium text-blue transition-colors hover:bg-blue-tint"
+          >
+            Подробнее
+            <IconArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 export default function TeachersPage() {
-  const withPrograms = lecturers.filter((l) => l.programs.length > 0).length;
+  const active = lecturers.filter((l) => l.programs.length > 0);
+  const idle = lecturers.filter((l) => l.programs.length === 0);
+  const withPrograms = active.length;
   const openSeminars = lecturers.reduce((n, l) => n + l.programs.length, 0);
 
   return (
@@ -128,15 +148,41 @@ export default function TeachersPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-6 py-12 lg:px-10">
-          <div className="flex flex-col gap-5">
-            {lecturers.map((l, i) => (
-              <Reveal key={l.id} delayMs={(i % 3) * 90}>
-                <LecturerCard l={l} />
-              </Reveal>
-            ))}
-          </div>
-        </section>
+        {active.length > 0 && (
+          <section className="mx-auto max-w-7xl px-6 pt-12 lg:px-10">
+            <div className="flex flex-col gap-5">
+              {active.map((l, i) => (
+                <Reveal key={l.id} delayMs={(i % 3) * 90}>
+                  <LecturerCard l={l} />
+                </Reveal>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {idle.length > 0 && (
+          <section className="mx-auto max-w-7xl px-6 pt-14 pb-12 lg:px-10">
+            <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+              <div>
+                <h2 className="text-2xl font-extrabold text-ink">Другие преподаватели</h2>
+                <p className="mt-2 max-w-[64ch] text-sm leading-relaxed text-body">
+                  Сейчас нет открытых записей. Чтобы не пропустить новые даты, подпишитесь на канал
+                  в ВКонтакте или MAX либо уточните у оператора:{" "}
+                  <a href="tel:88002504191" className="tabular font-semibold whitespace-nowrap text-blue hover:text-blue-dark">
+                    8 800 250-41-91
+                  </a>
+                </p>
+              </div>
+            </div>
+            <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {idle.map((l, i) => (
+                <Reveal key={l.id} delayMs={(i % 3) * 90} className="h-full">
+                  <CompactLecturerCard l={l} />
+                </Reveal>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
       <SiteFooter />

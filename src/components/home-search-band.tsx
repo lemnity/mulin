@@ -1,19 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { speakerRoster } from "@/lib/programs";
-import {
-  IconArrowRight,
-  IconCalendar,
-  IconChevronDown,
-  IconMonitor,
-  IconSearch,
-  IconSliders,
-  IconUser,
-  type IconProps,
-} from "@/components/icons";
+import { IconChevronDown, IconSearch, IconSliders } from "@/components/icons";
 import { beginPageTransition } from "@/components/page-loader";
 
 const popularQueries = [
@@ -25,47 +16,64 @@ const popularQueries = [
   "Охрана труда",
 ];
 
+/* Месяц → диапазон дат для фильтра расписания (`dateFrom`/`dateTo`). */
 const monthOptions = [
-  { label: "Сентябрь 2026", from: "2026-09-01", to: "2026-09-30" },
-  { label: "Октябрь 2026", from: "2026-10-01", to: "2026-10-31" },
-  { label: "Ноябрь 2026", from: "2026-11-01", to: "2026-11-30" },
+  { value: "2026-09", label: "Сентябрь 2026", from: "2026-09-01", to: "2026-09-30" },
+  { value: "2026-10", label: "Октябрь 2026", from: "2026-10-01", to: "2026-10-31" },
+  { value: "2026-11", label: "Ноябрь 2026", from: "2026-11-01", to: "2026-11-30" },
 ];
 
-function FilterSelect({
+/** Сегмент поисковой строки: подпись сверху, значение снизу, как в референсе. */
+function Segment({
   label,
-  icon: Icon,
-  value,
-  onChange,
-  options,
+  className = "",
+  children,
 }: {
   label: string;
-  icon: (props: IconProps) => React.ReactElement;
-  value: string;
-  onChange: (value: string) => void;
-  options: { label: string; value: string }[];
+  className?: string;
+  children: ReactNode;
 }) {
   return (
-    <label className="group/select relative block">
-      <span className="sr-only">{label}</span>
-      <Icon className="pointer-events-none absolute left-3.5 top-1/2 h-4.5 w-4.5 -translate-y-1/2 text-blue" />
+    <label
+      className={`flex min-w-0 flex-col justify-center gap-0.5 border-t border-border px-6 py-3.5 transition-colors hover:bg-surface focus-within:bg-blue-tint/40 lg:border-l lg:border-t-0 lg:py-3 ${className}`}
+    >
+      <span className="text-[0.8rem] text-muted">{label}</span>
+      {children}
+    </label>
+  );
+}
+
+function SegmentSelect({
+  value,
+  onChange,
+  placeholder,
+  options,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <span className="relative block">
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-13 w-full cursor-pointer appearance-none rounded-xl border border-border bg-page pl-11 pr-10 text-sm font-medium text-ink transition-colors hover:border-blue hover:bg-surface focus:border-blue focus:bg-surface focus:outline-none"
+        className="focus-quiet w-full cursor-pointer appearance-none truncate bg-transparent pr-7 text-[1.05rem] font-semibold text-ink"
       >
-        <option value="">{label}</option>
+        <option value="">{placeholder}</option>
         {options.map((o) => (
           <option key={o.value} value={o.value}>
             {o.label}
           </option>
         ))}
       </select>
-      <IconChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted transition-colors group-hover/select:text-blue" />
-    </label>
+      <IconChevronDown className="pointer-events-none absolute right-0 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+    </span>
   );
 }
 
-/** Поисковая панель под обложкой: карточка наезжает на низ обложки, как в референсе. */
+/** Поисковая панель под обложкой: одна строка-«пилюля» с четырьмя полями и круглой кнопкой. */
 export function HomeSearchBand() {
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -73,8 +81,9 @@ export function HomeSearchBand() {
   const [month, setMonth] = useState("");
   const [speaker, setSpeaker] = useState("");
 
-  function goToSchedule(params: URLSearchParams) {
-    const href = params.toString() ? `/schedule?${params.toString()}#programs` : "/schedule#programs";
+  function go(params: URLSearchParams) {
+    const qs = params.toString();
+    const href = `/schedule${qs ? `?${qs}` : ""}#programs`;
     beginPageTransition(href);
     router.push(href);
   }
@@ -84,19 +93,17 @@ export function HomeSearchBand() {
     const params = new URLSearchParams();
     if (query.trim()) params.set("q", query.trim());
     if (format) params.set("format", format);
-    if (speaker) params.set("speaker", speaker);
-    const picked = monthOptions.find((m) => m.label === month);
-    if (picked) {
-      params.set("dateFrom", picked.from);
-      params.set("dateTo", picked.to);
+    const m = monthOptions.find((o) => o.value === month);
+    if (m) {
+      params.set("dateFrom", m.from);
+      params.set("dateTo", m.to);
     }
-    goToSchedule(params);
+    if (speaker) params.set("speaker", speaker);
+    go(params);
   }
 
-  function handlePopularQuery(q: string) {
-    const params = new URLSearchParams();
-    params.set("q", q);
-    goToSchedule(params);
+  function goToQuery(q: string) {
+    go(new URLSearchParams({ q }));
   }
 
   return (
@@ -121,59 +128,67 @@ export function HomeSearchBand() {
         <form
           onSubmit={handleSubmit}
           role="search"
-          className="mt-5 grid gap-3 sm:grid-cols-3 xl:grid-cols-[minmax(0,1fr)_11rem_11rem_12rem]"
+          className="mt-5 overflow-hidden rounded-[15px] border border-border bg-page shadow-[0_4px_16px_rgba(16,24,40,0.06)] transition-colors focus-within:border-blue lg:flex lg:items-stretch"
         >
-          {/* Поле и кнопка — один контрол: общая рамка, подсветка при фокусе */}
-          <div className="flex h-13 items-center rounded-xl border border-border bg-surface pl-1 pr-1 transition-[border-color,box-shadow] focus-within:border-blue focus-within:shadow-[0_0_0_4px_rgba(29,111,224,0.12)] sm:col-span-3 xl:col-span-1">
-            <label className="relative flex h-full min-w-0 flex-1 items-center">
-              <span className="sr-only">Поиск по названию, теме или лектору</span>
-              <IconSearch className="pointer-events-none absolute left-3.5 h-4.5 w-4.5 text-muted" />
+          {/* Главное поле: белое на сером фоне фильтров, с лупой и самой широкой зоной */}
+          <label className="flex min-w-0 items-center gap-3.5 bg-surface px-5 py-3.5 lg:flex-[2.2] lg:py-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[11px] bg-blue-tint text-blue">
+              <IconSearch className="h-5 w-5" />
+            </span>
+            <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span className="text-[0.8rem] text-muted">Что ищем?</span>
               <input
                 type="search"
                 name="q"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Поиск по названию, теме или лектору"
+                placeholder="Название, тема или лектор"
                 autoComplete="off"
                 enterKeyHint="search"
-                className="focus-quiet h-full w-full appearance-none bg-transparent pl-11 pr-3 text-sm text-ink placeholder:text-muted [&::-webkit-search-cancel-button]:appearance-none"
+                className="focus-quiet w-full bg-transparent text-[1.05rem] font-semibold text-ink placeholder:font-medium placeholder:text-ink/40"
               />
-            </label>
-            <button
-              type="submit"
-              aria-label="Найти"
-              className="flex h-11 shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap rounded-lg bg-blue px-3.5 text-sm font-medium text-white transition-colors hover:bg-blue-dark sm:px-5"
-            >
-              <span className="hidden sm:inline">Найти</span>
-              <IconArrowRight className="h-4 w-4" />
-            </button>
-          </div>
+            </span>
+          </label>
 
-          <div className="contents">
-            <FilterSelect
-              label="Формат"
-              icon={IconMonitor}
+          <Segment label="Формат" className="lg:flex-1">
+            <SegmentSelect
               value={format}
               onChange={setFormat}
+              placeholder="Любой"
               options={[
-                { label: "Онлайн", value: "Онлайн" },
-                { label: "Очно", value: "Очно" },
+                { value: "Онлайн", label: "Онлайн" },
+                { value: "Очно", label: "Очно" },
               ]}
             />
-            <FilterSelect
-              label="Дата"
-              icon={IconCalendar}
+          </Segment>
+
+          <Segment label="Дата" className="lg:flex-1">
+            <SegmentSelect
               value={month}
               onChange={setMonth}
-              options={monthOptions.map((m) => ({ label: m.label, value: m.label }))}
+              placeholder="Когда"
+              options={monthOptions.map((m) => ({ value: m.value, label: m.label }))}
             />
-            <FilterSelect
-              label="Лектор"
-              icon={IconUser}
+          </Segment>
+
+          <Segment label="Лектор" className="lg:flex-[1.3]">
+            <SegmentSelect
               value={speaker}
               onChange={setSpeaker}
-              options={speakerRoster.map((s) => ({ label: s, value: s }))}
+              placeholder="Любой"
+              options={speakerRoster.map((s) => ({ value: s, label: s }))}
             />
+          </Segment>
+
+          <div className="border-t border-border bg-surface p-3 lg:flex lg:items-center lg:border-l lg:border-t-0 lg:py-2 lg:pl-2 lg:pr-2">
+            <button
+              type="submit"
+              aria-label="Найти программы"
+              className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-[11px] bg-blue text-sm font-medium text-white transition-colors hover:bg-blue-dark lg:h-14 lg:w-14"
+            >
+              <IconSearch className="h-5 w-5" />
+              <span className="lg:hidden">Найти</span>
+            </button>
           </div>
         </form>
 
@@ -183,7 +198,7 @@ export function HomeSearchBand() {
             <button
               key={q}
               type="button"
-              onClick={() => handlePopularQuery(q)}
+              onClick={() => goToQuery(q)}
               className="cursor-pointer rounded-full bg-page px-3.5 py-1.5 text-sm text-ink/85 ring-1 ring-inset ring-border transition-colors hover:bg-blue-tint hover:text-blue hover:ring-blue/40"
             >
               {q}

@@ -42,7 +42,7 @@ export function UpcomingEvents() {
               <h3 className="mt-3 text-balance text-base font-bold leading-snug text-ink">
                 {p.title}
               </h3>
-              <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-ink">
+              <div className="mb-4 mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-ink">
                 <span className="flex items-center gap-1.5">
                   {p.format === "Онлайн" ? (
                     <IconMonitor className="h-3.5 w-3.5 text-blue" />
@@ -56,7 +56,7 @@ export function UpcomingEvents() {
                   {p.timeRange}
                 </span>
               </div>
-              <span className="tabular mt-4 border-t border-border pt-4 text-lg font-extrabold text-ink">
+              <span className="tabular mt-auto border-t border-border pt-4 text-lg font-extrabold text-ink">
                 {formatPrice(p.price)}
               </span>
             </Link>

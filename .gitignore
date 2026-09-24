@@ -49,3 +49,13 @@ secrets.json
 
 # AI assistant instructions (local only)
 CLAUDE.md
+
+# Локальный дамп старой базы — не коммитить
+tumtipb-content-*.sql.gz
+*.sql
+
+# Файлы с доступами/секретами — НИКОГДА не коммитить
+Dostupy.xlsx
+*ostup*
+*.xlsx
+tumtipb.ru.txt

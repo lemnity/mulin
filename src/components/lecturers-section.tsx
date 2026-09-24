@@ -1,36 +1,36 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/reveal";
-import { IconArrowRight } from "@/components/icons";
+import { IconArrowRight, IconCalendar } from "@/components/icons";
+import { lecturers } from "@/lib/lecturers";
 
-function initialsOf(lastName: string, firstMiddle: string) {
-  return `${lastName[0] ?? ""}${firstMiddle[0] ?? ""}`.toUpperCase();
+function initialsOf(name: string) {
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
 }
 
-type Lecturer = { lastName: string; firstMiddle: string; bio: string; photo?: string };
+function splitName(name: string) {
+  const [lastName, ...rest] = name.split(" ");
+  return { lastName, firstMiddle: rest.join(" ") };
+}
 
-const lecturers: Lecturer[] = [
-  {
-    lastName: "Вихляева",
-    firstMiddle: "Елена Николаевна",
-    bio: "Налоговый консультант, эксперт-практик. Более 15 лет опыта.",
-  },
-  {
-    lastName: "Гейц",
-    firstMiddle: "Игорь Викторович",
-    bio: "Эксперт по кадровому делопроизводству. Консультант по трудовому праву и охране труда.",
-  },
-  {
-    lastName: "Затагина",
-    firstMiddle: "Виктория Вячеславовна",
-    bio: "Специалист по финансовому учёту и отчётности. Автор методических материалов.",
-  },
-  {
-    lastName: "Смирнов",
-    firstMiddle: "Алексей Павлович",
-    bio: "Эксперт в сфере государственных закупок. Практикующий консультант.",
-  },
-];
+function pluralizeSeminars(count: number) {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+  if (mod10 === 1 && mod100 !== 11) return "семинар";
+  if ([2, 3, 4].includes(mod10) && ![12, 13, 14].includes(mod100)) return "семинара";
+  return "семинаров";
+}
+
+/** Четверо самых востребованных лекторов (по числу открытых семинаров) с фото. */
+const featured = lecturers
+  .filter((l) => l.photo)
+  .sort((a, b) => b.programs.length - a.programs.length)
+  .slice(0, 4);
 
 export function LecturersSection() {
   return (
@@ -42,43 +42,54 @@ export function LecturersSection() {
         </Link>
       </div>
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {lecturers.map(({ lastName, firstMiddle, bio, photo }, i) => (
-          <Reveal key={lastName} delayMs={(i % 4) * 80}>
-            <Link
-              href="/about/teachers"
-              className="group flex h-full flex-col rounded-xl border border-border bg-surface p-5 transition-colors hover:border-blue"
-            >
-              <div className="flex items-start gap-3">
-                {photo ? (
-                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full">
-                    <Image
-                      src={photo}
-                      alt={`${lastName} ${firstMiddle}`}
-                      fill
-                      sizes="64px"
-                      className="object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-blue-tint text-lg font-semibold text-blue">
-                    {initialsOf(lastName, firstMiddle)}
-                  </div>
-                )}
-                <p className="pt-1 font-bold leading-snug text-ink">
-                  {lastName}
-                  <br />
-                  {firstMiddle}
-                </p>
-              </div>
-              <p className="mt-3 text-sm leading-relaxed text-muted">{bio}</p>
-              <span className="mt-auto flex justify-end pt-4">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-tint text-blue transition-colors group-hover:bg-blue group-hover:text-white">
-                  <IconArrowRight className="h-4 w-4" />
-                </span>
-              </span>
-            </Link>
-          </Reveal>
-        ))}
+        {featured.map((l, i) => {
+          const { lastName, firstMiddle } = splitName(l.name);
+          return (
+            <Reveal key={l.id} delayMs={(i % 4) * 80} className="h-full">
+              <Link
+                href={`/about/teachers/${l.id}`}
+                className="group flex h-full flex-col rounded-xl border border-border bg-surface p-5 transition-colors hover:border-blue"
+              >
+                <div className="flex items-start gap-3">
+                  {l.photo ? (
+                    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full ring-1 ring-inset ring-border">
+                      <Image
+                        src={l.photo}
+                        alt={l.name}
+                        fill
+                        sizes="64px"
+                        className="object-cover object-top"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-blue-tint text-lg font-semibold text-blue ring-1 ring-inset ring-border">
+                      {initialsOf(l.name)}
+                    </div>
+                  )}
+                  <p className="pt-1 font-bold leading-snug text-ink">
+                    {lastName}
+                    <br />
+                    {firstMiddle}
+                  </p>
+                </div>
+                <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted">{l.bio}</p>
+                <div className="mt-auto flex items-center justify-between pt-4">
+                  {l.programs.length > 0 ? (
+                    <span className="flex items-center gap-1.5 rounded-full bg-page px-3 py-1.5 text-xs font-medium text-ink/80 ring-1 ring-inset ring-border">
+                      <IconCalendar className="h-3.5 w-3.5 text-blue" />
+                      {l.programs.length} {pluralizeSeminars(l.programs.length)}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-muted">Расписание уточняется</span>
+                  )}
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-tint text-blue transition-colors group-hover:bg-blue group-hover:text-white">
+                    <IconArrowRight className="h-4 w-4" />
+                  </span>
+                </div>
+              </Link>
+            </Reveal>
+          );
+        })}
       </div>
     </section>
   );

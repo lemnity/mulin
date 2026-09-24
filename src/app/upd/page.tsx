@@ -25,6 +25,7 @@ const areaTone: Record<UpdateArea, string> = {
   Поиск: "bg-amber-tint text-amber-text",
   Доступность: "bg-green-tint text-green-text",
   Страницы: "bg-page text-body ring-1 ring-inset ring-border",
+  Преподаватели: "bg-green-tint text-green-text",
   Корзина: "bg-amber-tint text-amber-text",
   Общее: "bg-page text-body ring-1 ring-inset ring-border",
 };

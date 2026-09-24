@@ -29,10 +29,10 @@ export function ResourcesSection() {
       <h2 className="text-2xl font-bold text-ink">Полезное для специалистов</h2>
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
         {resources.map(({ title, desc, href, icon: Icon }, i) => (
-          <Reveal key={title} delayMs={i * 100}>
+          <Reveal key={title} delayMs={i * 100} className="h-full">
             <Link
               href={href}
-              className="group flex flex-col gap-4 rounded-xl border border-border bg-surface p-5 transition-colors hover:border-blue"
+              className="group flex h-full flex-col gap-4 rounded-xl border border-border bg-surface p-5 transition-colors hover:border-blue"
             >
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-tint text-blue">
                 <Icon className="h-5 w-5" />

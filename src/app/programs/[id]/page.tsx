@@ -8,13 +8,14 @@ import { ProgramHero } from "@/components/program-hero";
 import { ProgramTabs } from "@/components/program-tabs";
 import { AudienceBox } from "@/components/audience-box";
 import { AgendaList } from "@/components/agenda-list";
-import { SpeakerCard } from "@/components/speaker-card";
+import { ProgramSpeaker } from "@/components/program-speaker";
 import { DocumentItem } from "@/components/document-item";
 import { RelatedPrograms } from "@/components/related-programs";
 import { ParticipationSidebar } from "@/components/participation-sidebar";
 import { SectionHeading } from "@/components/section-heading";
 import { programs, getProgramById, getRelatedPrograms, typePlural } from "@/lib/programs";
 import { getProgramDetail } from "@/lib/program-details";
+import { getLecturersByProgramId } from "@/lib/lecturers";
 import { IconFile, IconTarget, IconUser, IconCalendar } from "@/components/icons";
 
 export function generateStaticParams() {
@@ -42,6 +43,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
 
   const detail = getProgramDetail(program);
   const related = getRelatedPrograms(program);
+  const lecturers = getLecturersByProgramId(program.id);
 
   return (
     <>
@@ -83,16 +85,23 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
 
               <section id="speaker" className="scroll-mt-32">
                 <div className="flex items-center justify-between">
-                  <SectionHeading icon={<IconUser className="h-5 w-5" />}>Лектор</SectionHeading>
-                  <a
-                    href="#"
+                  <SectionHeading icon={<IconUser className="h-5 w-5" />}>
+                    {lecturers.length > 1 ? "Лекторы" : "Лектор"}
+                  </SectionHeading>
+                  <Link
+                    href="/about/teachers"
                     className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-blue hover:text-blue"
                   >
                     Все преподаватели
-                  </a>
+                  </Link>
                 </div>
                 <div className="mt-4">
-                  <SpeakerCard name={program.speaker} bio={detail.speakerBio} photo={detail.speakerPhoto} />
+                  <ProgramSpeaker
+                    lecturers={lecturers}
+                    fallbackName={program.speaker}
+                    fallbackBio={detail.speakerBio}
+                    fallbackPhoto={detail.speakerPhoto}
+                  />
                 </div>
               </section>
 

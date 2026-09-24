@@ -34,10 +34,10 @@ export function DirectionsGrid() {
       </div>
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {directions.map(({ label, icon: Icon, query }, i) => (
-          <Reveal key={label} delayMs={(i % 4) * 80}>
+          <Reveal key={label} delayMs={(i % 4) * 80} className="h-full">
             <Link
               href={query ? `/schedule?q=${encodeURIComponent(query)}#programs` : "/schedule"}
-              className="group flex items-center gap-3 rounded-xl border border-border bg-surface p-4 transition-colors hover:border-blue"
+              className="group flex h-full items-center gap-3 rounded-xl border border-border bg-surface p-4 transition-colors hover:border-blue"
             >
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-tint text-blue">
                 <Icon className="h-5 w-5" />

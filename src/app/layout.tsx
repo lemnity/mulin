@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CartProvider } from "@/lib/cart-context";
 import { CartFloatingBar } from "@/components/cart-floating-bar";
 import { RouteTransitionLoader } from "@/components/page-loader";
+import { ScrollTopButton } from "@/components/scroll-top-button";
 import "./globals.css";
 import "./page-loader.css";
 
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <CartProvider>
           {children}
           <CartFloatingBar />
+          <ScrollTopButton />
           <RouteTransitionLoader />
         </CartProvider>
       </body>

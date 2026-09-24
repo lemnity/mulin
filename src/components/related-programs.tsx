@@ -8,6 +8,12 @@ const typeBadge: Record<Program["type"], string> = {
   Курс: "bg-amber-tint text-amber-text",
 };
 
+/** Короткое время начала вида «08:00» из строки «с 08-00 до 11-00 часов…», иначе исходный текст как есть. */
+function shortStartTime(timeRange: string) {
+  const match = timeRange.match(/(\d{2})-(\d{2})/);
+  return match ? `${match[1]}:${match[2]}` : timeRange;
+}
+
 export function RelatedPrograms({ items }: { items: Program[] }) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -40,7 +46,7 @@ export function RelatedPrograms({ items }: { items: Program[] }) {
               </span>
               <span className="flex items-center gap-1">
                 <IconClock className="h-3.5 w-3.5" />
-                {program.timeRange.split(" ")[0]}
+                {shortStartTime(program.timeRange)}
               </span>
             </div>
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-tint text-blue transition-colors group-hover:bg-blue group-hover:text-white">

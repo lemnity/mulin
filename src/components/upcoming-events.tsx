@@ -26,10 +26,10 @@ export function UpcomingEvents() {
       </div>
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((p, i) => (
-          <Reveal key={p.id} delayMs={i * 100}>
+          <Reveal key={p.id} delayMs={i * 100} className="h-full">
             <Link
               href={`/programs/${p.id}`}
-              className="flex flex-col rounded-xl border border-border bg-surface p-5 transition-colors hover:border-blue"
+              className="flex h-full flex-col rounded-xl border border-border bg-surface p-5 transition-colors hover:border-blue"
             >
               <div className="flex items-center justify-between gap-3">
                 <span

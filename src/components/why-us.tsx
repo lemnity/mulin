@@ -30,7 +30,7 @@ export function WhyUs() {
       <h2 className="text-2xl font-bold text-ink">Почему выбирают нас</h2>
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {features.map(({ icon: Icon, title, desc }, i) => (
-          <Reveal key={title} delayMs={(i % 4) * 80}>
+          <Reveal key={title} delayMs={(i % 4) * 80} className="h-full">
             <div className="flex h-full items-start gap-3 rounded-xl border border-border bg-surface p-5">
               <Icon className="h-9 w-9 shrink-0 text-blue" />
               <div>

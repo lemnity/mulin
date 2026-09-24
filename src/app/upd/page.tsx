@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { IconCalendar, IconClock, IconList } from "@/components/icons";
+import { IconCalendar, IconChevronDown, IconClock, IconList } from "@/components/icons";
 import {
   formatDate,
   formatHours,
@@ -75,7 +75,7 @@ export default function UpdatesPage() {
             </p>
 
             <div className="mt-8 grid gap-3 sm:grid-cols-3">
-              <StatCard icon={<IconClock className="h-5 w-5" />} label="живых часов всего" value={formatHours(total)} />
+              <StatCard icon={<IconClock className="h-5 w-5" />} label="затрачено всего" value={formatHours(total)} />
               <StatCard icon={<IconList className="h-5 w-5" />} label="записей в журнале" value={String(platformUpdates.length)} />
               <StatCard
                 icon={<IconCalendar className="h-5 w-5" />}
@@ -87,19 +87,22 @@ export default function UpdatesPage() {
         </section>
 
         <section className="mx-auto max-w-5xl px-6 py-12 lg:px-10">
-          {groups.map(([date, items]) => {
+          {groups.map(([date, items], i) => {
             const dayHours = totalHours(items);
             return (
-              <section key={date} className="mb-12 last:mb-0">
-                <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-border pb-3">
-                  <h2 className="text-lg font-bold text-ink">{formatDate(date)}</h2>
+              <details key={date} open={i === 0} className="group mb-4 last:mb-0">
+                <summary className="flex cursor-pointer list-none flex-wrap items-center justify-between gap-x-6 gap-y-1 rounded-lg border-b border-border py-3 pr-1 transition-colors hover:bg-blue-tint/40 [&::-webkit-details-marker]:hidden">
+                  <h2 className="flex items-center gap-2.5 text-lg font-bold text-ink">
+                    <IconChevronDown className="h-5 w-5 -rotate-90 text-blue transition-transform group-open:rotate-0" />
+                    {formatDate(date)}
+                  </h2>
                   <p className="text-sm text-body">
                     {items.length} {items.length === 1 ? "запись" : items.length < 5 ? "записи" : "записей"} ·{" "}
                     <span className="tabular font-semibold text-ink">{formatHours(dayHours)}</span>
                   </p>
-                </div>
+                </summary>
 
-                <ol className="mt-4 divide-y divide-border">
+                <ol className="mb-6 mt-2 divide-y divide-border">
                   {items.map((u) => (
                     <li key={u.title} className="grid gap-3 py-5 sm:grid-cols-[1fr_auto] sm:gap-8">
                       <div>
@@ -126,7 +129,7 @@ export default function UpdatesPage() {
                     </li>
                   ))}
                 </ol>
-              </section>
+              </details>
             );
           })}
         </section>

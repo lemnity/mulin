@@ -30,6 +30,29 @@ export type PlatformUpdate = {
 
 export const platformUpdates: PlatformUpdate[] = [
   {
+    date: "2026-09-25",
+    area: "Преподаватели",
+    title: "Фото преподавателей на опубликованном сайте",
+    details:
+      "На GitHub Pages аватарки лекторов не загружались: ссылки на фото не учитывали адрес сайта /mulin. Исправлено на странице «Преподаватели», в профиле лектора, на странице программы и в блоке на главной.",
+    hours: 0.5,
+  },
+  {
+    date: "2026-09-25",
+    area: "Преподаватели",
+    title: "Компактные карточки преподавателей без ближайших семинаров",
+    details:
+      "Лекторы без открытых записей вынесены в отдельный блок «Другие преподаватели» — сетка компактных карточек вместо широких с пустой правой колонкой. Текст про подписку и звонок оператору — один раз в подзаголовке блока, а не в каждой карточке.",
+    hours: 1,
+  },
+  {
+    date: "2026-09-25",
+    area: "Преподаватели",
+    title: "Кнопка «Уточнить у оператора» в профиле лектора",
+    details: "Кнопка «Позвонить» на странице преподавателя переименована в «Уточнить у оператора».",
+    hours: 0.25,
+  },
+  {
     date: "2026-09-24",
     area: "Общее",
     title: "Плавающая кнопка «наверх»",
@@ -51,7 +74,7 @@ export const platformUpdates: PlatformUpdate[] = [
     title: "Карточка лектора на программе — реальные данные вместо заглушки",
     details:
       "Раздел «Лектор» на странице программы теперь показывает настоящее фото, биографию и ссылку на профиль преподавателя, если он есть в базе. Если у программы несколько лекторов — переключатель между ними. Если лектор не назначен — честно «Лектор уточняется» вместо выдуманного описания.",
-    hours: 1.5,
+    hours: 5.2, // 5 ч 12 мин
   },
   {
     date: "2026-09-24",
@@ -255,16 +278,23 @@ export function groupByDate(updates: PlatformUpdate[]) {
   return [...map.entries()].sort(([a], [b]) => (a < b ? 1 : -1));
 }
 
+function plural(n: number, one: string, few: string, many: string) {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod10 === 1 && mod100 !== 11) return one;
+  if ([2, 3, 4].includes(mod10) && ![12, 13, 14].includes(mod100)) return few;
+  return many;
+}
+
+/** 5.2 → «5 часов 12 минут», 0.5 → «30 минут», 2 → «2 часа». */
 export function formatHours(hours: number) {
-  const rounded = Math.round(hours * 100) / 100;
-  const text = new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 2 }).format(rounded);
-  const mod10 = Math.floor(rounded) % 10;
-  const mod100 = Math.floor(rounded) % 100;
-  const isInt = Number.isInteger(rounded);
-  let word = "часов";
-  if (isInt && mod10 === 1 && mod100 !== 11) word = "час";
-  else if ((isInt && [2, 3, 4].includes(mod10) && ![12, 13, 14].includes(mod100)) || !isInt) word = "часа";
-  return `${text} ${word}`;
+  const totalMinutes = Math.round(hours * 60);
+  const h = Math.floor(totalMinutes / 60);
+  const m = totalMinutes % 60;
+  const parts: string[] = [];
+  if (h > 0) parts.push(`${h} ${plural(h, "час", "часа", "часов")}`);
+  if (m > 0 || h === 0) parts.push(`${m} ${plural(m, "минута", "минуты", "минут")}`);
+  return parts.join(" ");
 }
 
 export function formatDate(iso: string, { short = false } = {}) {

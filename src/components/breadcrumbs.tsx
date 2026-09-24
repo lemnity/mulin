@@ -18,7 +18,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
                 {item.label}
               </Link>
             ) : (
-              <span className="max-w-[40ch] truncate text-ink/80">{item.label}</span>
+              <span className="max-w-[40ch] truncate text-ink">{item.label}</span>
             )}
           </span>
         ))}

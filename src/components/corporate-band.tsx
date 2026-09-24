@@ -39,9 +39,9 @@ export function CorporateBand() {
         </div>
 
         <div className="rounded-2xl bg-ink p-8 lg:p-10">
-          <p className="text-sm text-white/60">Уже обучили команды</p>
+          <p className="text-sm text-white/85">Уже обучили команды</p>
           <p className="tabular mt-1 text-5xl font-extrabold text-white">120+</p>
-          <p className="text-sm text-white/60">организаций по всей России</p>
+          <p className="text-sm text-white/85">организаций по всей России</p>
 
           <ul className="mt-7 space-y-3 border-t border-white/10 pt-6">
             {checklist.map((item) => (

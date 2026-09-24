@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --ink: #16213a;
-  --body-text: #5b6472;
-  --muted: #8a93a3;
+  --ink: #000000;
+  --body-text: #1f2530;
+  --muted: #474f5c;
 
   --page-bg: #f7f8fb;
   --surface: #ffffff;
@@ -24,7 +24,7 @@
   --amber-text: #b7691a;
 
   --footer-bg: #1b2436;
-  --footer-text: #aab2c2;
+  --footer-text: #dfe4ec;
   --footer-line: #2c3650;
 }
 

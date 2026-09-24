@@ -79,7 +79,7 @@ export function ProgramRow({
           {program.description}
         </p>
 
-        <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2.5 text-sm text-ink/85">
+        <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2.5 text-sm text-ink">
           <span className="flex items-center gap-1.5">
             {program.format === "Онлайн" ? (
               <IconMonitor className="h-4 w-4 text-blue" />

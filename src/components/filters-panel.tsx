@@ -67,7 +67,7 @@ export function FiltersPanel({
 
       <FilterDropdown label="Период" count={periodCount} panelClassName="w-64">
         <div className="flex flex-col gap-2.5">
-          <label className="flex items-center gap-2 text-sm text-ink/80">
+          <label className="flex items-center gap-2 text-sm text-ink">
             <span className="w-6 shrink-0">с</span>
             <input
               type="date"
@@ -76,7 +76,7 @@ export function FiltersPanel({
               className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-ink"
             />
           </label>
-          <label className="flex items-center gap-2 text-sm text-ink/80">
+          <label className="flex items-center gap-2 text-sm text-ink">
             <span className="w-6 shrink-0">по</span>
             <input
               type="date"

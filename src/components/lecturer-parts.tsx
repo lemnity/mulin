@@ -71,7 +71,7 @@ export function ProgramRow({ p }: { p: LecturerProgram }) {
             <span aria-hidden="true">·</span>
             <span>{p.type}</span>
             <span aria-hidden="true">·</span>
-            <span className="tabular font-medium text-ink/80">{formatPrice(p.price)}</span>
+            <span className="tabular font-medium text-ink">{formatPrice(p.price)}</span>
           </span>
         </span>
 

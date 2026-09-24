@@ -53,7 +53,7 @@ export function ProgramSpeaker({
               className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                 l.id === active.id
                   ? "bg-blue text-white"
-                  : "bg-page text-ink/80 ring-1 ring-inset ring-border hover:text-ink"
+                  : "bg-page text-ink ring-1 ring-inset ring-border hover:text-ink"
               }`}
             >
               {l.name}

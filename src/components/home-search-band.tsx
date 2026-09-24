@@ -145,7 +145,7 @@ export function HomeSearchBand() {
                 placeholder="Название, тема или лектор"
                 autoComplete="off"
                 enterKeyHint="search"
-                className="focus-quiet w-full bg-transparent text-[1.05rem] font-semibold text-ink placeholder:font-medium placeholder:text-ink/40"
+                className="focus-quiet w-full bg-transparent text-[1.05rem] font-semibold text-ink placeholder:font-medium placeholder:text-ink/60"
               />
             </span>
           </label>
@@ -199,7 +199,7 @@ export function HomeSearchBand() {
               key={q}
               type="button"
               onClick={() => goToQuery(q)}
-              className="cursor-pointer rounded-full bg-page px-3.5 py-1.5 text-sm text-ink/85 ring-1 ring-inset ring-border transition-colors hover:bg-blue-tint hover:text-blue hover:ring-blue/40"
+              className="cursor-pointer rounded-full bg-page px-3.5 py-1.5 text-sm text-ink ring-1 ring-inset ring-border transition-colors hover:bg-blue-tint hover:text-blue hover:ring-blue/40"
             >
               {q}
             </button>

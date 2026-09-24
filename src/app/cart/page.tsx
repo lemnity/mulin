@@ -64,7 +64,7 @@ export default function CartPage() {
                         <h2 className="mt-1 text-balance text-base font-bold leading-snug text-ink">
                           {program.title}
                         </h2>
-                        <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-ink/80">
+                        <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-ink">
                           <span className="flex items-center gap-1.5">
                             <IconClock className="h-3.5 w-3.5 text-blue" />
                             {day}, {program.timeRange}

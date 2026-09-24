@@ -76,7 +76,7 @@ export function LecturersSection() {
                 <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted">{l.bio}</p>
                 <div className="mt-auto flex items-center justify-between pt-4">
                   {l.programs.length > 0 ? (
-                    <span className="flex items-center gap-1.5 rounded-full bg-page px-3 py-1.5 text-xs font-medium text-ink/80 ring-1 ring-inset ring-border">
+                    <span className="flex items-center gap-1.5 rounded-full bg-page px-3 py-1.5 text-xs font-medium text-ink ring-1 ring-inset ring-border">
                       <IconCalendar className="h-3.5 w-3.5 text-blue" />
                       {l.programs.length} {pluralizeSeminars(l.programs.length)}
                     </span>

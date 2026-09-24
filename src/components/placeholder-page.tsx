@@ -36,7 +36,7 @@ export function PlaceholderPage({
             <p className="mx-auto mt-2 max-w-[48ch] text-sm leading-relaxed text-muted">
               Мы собираем этот сайт по частям. Скоро здесь появится:
             </p>
-            <ul className="mx-auto mt-4 flex max-w-[40ch] flex-col gap-2 text-left text-sm text-ink/80">
+            <ul className="mx-auto mt-4 flex max-w-[40ch] flex-col gap-2 text-left text-sm text-ink">
               {comingItems.map((item) => (
                 <li key={item} className="flex items-start gap-2">
                   <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-blue" />

@@ -59,7 +59,7 @@ export function ProgramCard({
       </h3>
       <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-body">{program.description}</p>
 
-      <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-ink/80">
+      <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-ink">
         <span className="flex items-center gap-1.5">
           {program.format === "Онлайн" ? (
             <IconMonitor className="h-3.5 w-3.5 text-blue" />

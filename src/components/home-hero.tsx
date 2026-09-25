@@ -72,11 +72,9 @@ export function HomeHero() {
             </ul>
           </div>
 
-          {/* Фотопанель: квадратный кадр показывает правую часть снимка, где нет впечатанного
-              заголовка; впечатанную в фото карточку «25 лет» накрывает живая карточка с тем же
-              текстом (нижний правый угол). При замене фото на чистое это можно упростить. */}
+          {/* Фотопанель: квадратный кадр из широкого снимка, человек — в правой части кадра. */}
           <div className="relative mx-auto aspect-square w-full max-w-[34rem] lg:max-w-none">
-            <HeroPhoto className="rounded-3xl" objectPosition="right center" />
+            <HeroPhoto className="rounded-3xl" />
 
             <div className={`${glassCard} -left-2 top-[22%] flex max-w-[14rem] items-center gap-3 bg-white/85 p-4 sm:-left-6 sm:top-1/2 sm:-translate-y-1/2`}>
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-tint text-blue">
@@ -90,10 +88,10 @@ export function HomeHero() {
 
             <p
               aria-hidden="true"
-              className="absolute right-5 top-5 hidden max-w-[11rem] -rotate-3 text-right text-[0.95rem] font-semibold italic leading-snug text-blue-dark sm:block"
+              className="absolute left-6 top-6 z-10 hidden max-w-[11rem] -rotate-3 text-left text-[0.95rem] font-semibold italic leading-snug text-blue-dark [text-shadow:0_0_10px_rgba(255,255,255,0.95),0_0_3px_rgba(255,255,255,0.9)] sm:block"
             >
               Инвестиции в&nbsp;профессиональный рост
-              <svg viewBox="0 0 120 8" className="ml-auto mt-1 h-2 w-24 text-blue" aria-hidden="true">
+              <svg viewBox="0 0 120 8" className="mt-1 h-2 w-24 text-blue" aria-hidden="true">
                 <path d="M2 5c20-4 40-4 60-1s40 1 56-2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
             </p>

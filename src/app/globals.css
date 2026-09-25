@@ -212,3 +212,65 @@ html[data-vision="on"] * {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---------- Слайдер обложки (HeroPhoto) ----------
+   3 кадра × 6 с = 18 с на круг. Каждый кадр ~1 с проявляется, держится и медленно
+   «отъезжает» (1.08 → 1), затем растворяется в следующий. Задержка -1 с — чтобы первый
+   кадр был виден сразу при загрузке. */
+.hero-slide {
+  opacity: 0;
+  animation: hero-slide 18s linear infinite both;
+  animation-delay: calc(var(--hero-i) * 6s - 1s);
+  will-change: opacity, transform;
+}
+
+@keyframes hero-slide {
+  0% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  5.5% {
+    opacity: 1;
+  }
+  33.3% {
+    opacity: 1;
+  }
+  39% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+.hero-dot {
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: hero-dot 18s linear infinite both;
+  animation-delay: calc(var(--hero-i) * 6s - 1s);
+}
+
+@keyframes hero-dot {
+  0% {
+    transform: scaleX(0);
+  }
+  33.3% {
+    transform: scaleX(1);
+  }
+  33.4%,
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide,
+  .hero-dot {
+    animation: none;
+  }
+  .hero-slide:first-child {
+    opacity: 1;
+  }
+}

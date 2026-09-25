@@ -210,11 +210,12 @@ function UtilityDropdown({ item }: { item: NavItem }) {
   return (
     <details name="desktop-nav" className="group relative">
       <summary
-        className={`flex cursor-pointer list-none items-center whitespace-nowrap text-[0.9rem] transition-colors hover:text-blue group-open:text-blue [&::-webkit-details-marker]:hidden ${
+        className={`flex cursor-pointer list-none items-center gap-1 whitespace-nowrap text-[0.9rem] transition-colors hover:text-blue group-open:text-blue [&::-webkit-details-marker]:hidden ${
           active ? "font-medium text-blue" : "text-ink"
         }`}
       >
         {item.label}
+        <IconChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180" />
       </summary>
       <div className="menu-panel absolute left-0 top-[calc(100%+0.75rem)] z-40 w-64 rounded-xl border border-border bg-surface p-2 shadow-lg">
         {item.children!.map((child) => (

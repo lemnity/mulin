@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { IconChat, IconHeart, IconMail, IconPhone, IconPin } from "@/components/icons";
 import { LogoLockup } from "@/components/logo";
+import { ContactButton } from "@/components/contact-dialog";
 import { SocialLinks } from "@/components/social-links";
 
 const columns = [
@@ -103,13 +104,10 @@ export function SiteFooter() {
             </li>
             <li>Время работы: Пн–Пт 9:00–18:00 (Мск)</li>
           </ul>
-          <a
-            href="#"
-            className="mt-5 inline-flex items-center gap-2 rounded-lg border border-footer-line px-4 py-2.5 text-sm font-medium text-white transition-colors hover:border-white"
-          >
+          <ContactButton className="mt-5 inline-flex items-center gap-2 rounded-lg border border-footer-line px-4 py-2.5 text-sm font-medium text-white transition-colors hover:border-white">
             <IconChat className="h-4 w-4" />
             Написать нам
-          </a>
+          </ContactButton>
         </div>
       </div>
 

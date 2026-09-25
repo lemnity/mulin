@@ -1,3 +1,4 @@
+import { ContactButton } from "@/components/contact-dialog";
 import { IconChat, IconPhone } from "@/components/icons";
 
 export function HelpBand() {
@@ -25,13 +26,10 @@ export function HelpBand() {
           >
             8 800 250-41-91
           </a>
-          <a
-            href="#"
-            className="inline-flex h-[3.25rem] items-center gap-2.5 rounded-xl border border-[#D5DFEE] bg-surface px-6 text-[0.95rem] font-semibold text-ink transition-colors hover:border-blue hover:text-blue"
-          >
+          <ContactButton className="inline-flex h-[3.25rem] items-center gap-2.5 rounded-xl border border-[#D5DFEE] bg-surface px-6 text-[0.95rem] font-semibold text-ink transition-colors hover:border-blue hover:text-blue">
             <IconChat className="h-5 w-5" />
             Написать нам
-          </a>
+          </ContactButton>
         </div>
       </div>
     </section>

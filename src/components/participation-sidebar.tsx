@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { ContactButton } from "@/components/contact-dialog";
 import type { Program } from "@/lib/programs";
 import { weekdayFull } from "@/lib/programs";
 import type { ProgramDetail } from "@/lib/program-details";
@@ -150,13 +151,13 @@ export function ParticipationSidebar({
           8 800 250-41-91
         </a>
         <p className="text-xs text-muted">Звонок по России бесплатный</p>
-        <a
-          href="#"
-          className="mt-3 flex items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:border-blue hover:text-blue"
+        <ContactButton
+          topic={program.title}
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:border-blue hover:text-blue"
         >
           <IconChat className="h-4 w-4" />
           Написать нам
-        </a>
+        </ContactButton>
       </div>
     </aside>
   );

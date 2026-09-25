@@ -48,14 +48,13 @@ type NavItem = {
 
 const PHONE_DISPLAY = "8 800 250-41-91";
 const PHONE_HREF = "tel:88002504191";
-const ADDRESS = "Адрес: г. Тюмень, ул. Максима Горького, дом 59/3";
+const ADDRESS = "г. Тюмень, ул. Максима Горького, д. 59/3";
 /* Адрес прежнего сайта: подставить реальный, когда будет известен. */
 const OLD_SITE_URL = "#";
 
 /* Верхняя полоса: служебные ссылки, как в референсе. */
 const utilityLinks: { label: string; href: string; external?: boolean }[] = [
   { label: "Новости", href: "/news" },
-  { label: "Документы", href: "/about/documents" },
   { label: "Контакты", href: "/contacts" },
   { label: "Старая версия сайта", href: OLD_SITE_URL, external: true },
 ];
@@ -63,6 +62,19 @@ const utilityLinks: { label: string; href: string; external?: boolean }[] = [
 /* Основное меню: Обучение ▾ · Расписание · О центре ▾ · Услуги ▾.
    «Контакты» и «Корпоративное обучение» здесь не дублируются: контакты — в верхней
    полосе, корпоративное обучение — внутри «Услуг». */
+/* «О центре» живёт в верхней полосе; в мобильном меню — вместе с основными пунктами. */
+const aboutNav: NavItem = {
+  label: "О центре",
+  children: [
+    { label: "О нас", href: "/about" },
+    { label: "Преподаватели", href: "/about/teachers" },
+    { label: "Документы", href: "/about/documents" },
+    { label: "Отзывы", href: "/reviews" },
+    { label: "Вопросы и ответы", href: "/faq" },
+    { label: "ИПБ России", href: "/ipb-russia" },
+  ],
+};
+
 const navItems: NavItem[] = [
   {
     label: "Обучение",
@@ -94,18 +106,6 @@ const navItems: NavItem[] = [
     },
   },
   { label: "Расписание", href: "/schedule" },
-  {
-    label: "О центре",
-    children: [
-      { label: "О нас", href: "/about" },
-      { label: "Преподаватели", href: "/about/teachers" },
-      { label: "Документы", href: "/about/documents" },
-      { label: "Отзывы", href: "/reviews" },
-      { label: "Новости", href: "/news" },
-      { label: "Вопросы и ответы", href: "/faq" },
-      { label: "ИПБ России", href: "/ipb-russia" },
-    ],
-  },
   {
     label: "Услуги",
     columns: [
@@ -151,6 +151,8 @@ function itemChildren(item: NavItem): NavChild[] {
 
 /* Пути, за которые отвечает пункт верхнего уровня («Расписание»): вложенные ссылки на них
    (направления в «Обучении») не должны подсвечивать ещё и родительское меню. */
+const mobileNavItems: NavItem[] = [...navItems.slice(0, -1), aboutNav, ...navItems.slice(-1)];
+
 const topLevelPaths = new Set(navItems.filter((i) => i.href).map((i) => pathOf(i.href!)));
 
 function isNavItemActive(pathname: string, item: NavItem) {
@@ -172,74 +174,95 @@ function LanguageSwitch() {
     <span
       role="button"
       aria-disabled="true"
-      title="Английская версия скоро"
+      title="Английская версия — скоро"
       aria-label="English version, скоро"
-      className="inline-flex h-9 cursor-default select-none items-center gap-1.5 rounded-full border border-border bg-surface px-3 text-[0.8rem] font-semibold tracking-wide text-ink 2xl:pr-1.5"
+      className="inline-flex h-10 cursor-default select-none items-center gap-1.5 rounded-full bg-surface px-4 text-[0.88rem] font-semibold tracking-wide text-ink"
     >
       EN
-      <span
-        aria-hidden="true"
-        className="h-1.5 w-1.5 rounded-full bg-gold 2xl:hidden"
-      />
-      <span className="hidden rounded-full bg-gold/25 px-1.5 py-0.5 text-[0.62rem] font-semibold uppercase tracking-wide text-gold-dark 2xl:inline">
-        скоро
-      </span>
+      <IconChevronDown className="h-3.5 w-3.5" />
     </span>
   );
 }
 
-function UtilityBar() {
+/** Выпадающий пункт верхней полосы («О центре») — в стиле служебных ссылок. */
+function UtilityDropdown({ item }: { item: NavItem }) {
+  const pathname = usePathname();
+  const active = isNavItemActive(pathname, item);
   return (
-    <div className="hidden border-b border-border bg-hero-band md:block">
-      <div data-vision-wrap className="mx-auto flex h-11 max-w-[1680px] items-center gap-5 px-6 3xl:px-8">
+    <details name="desktop-nav" className="group relative">
+      <summary
+        className={`flex cursor-pointer list-none items-center whitespace-nowrap text-[0.9rem] transition-colors hover:text-blue group-open:text-blue [&::-webkit-details-marker]:hidden ${
+          active ? "font-medium text-blue" : "text-ink"
+        }`}
+      >
+        {item.label}
+      </summary>
+      <div className="menu-panel absolute left-0 top-[calc(100%+0.75rem)] z-40 w-64 rounded-xl border border-border bg-surface p-2 shadow-lg">
+        {item.children!.map((child) => (
+          <Link
+            key={child.href}
+            href={child.href}
+            className="flex items-center rounded-md px-3 py-2.5 text-sm text-ink transition-colors hover:bg-blue-tint hover:text-blue"
+          >
+            {child.label}
+          </Link>
+        ))}
+      </div>
+    </details>
+  );
+}
+
+function UtilityBar() {
+  const oldSite = utilityLinks.find((l) => l.external)!;
+  return (
+    <div data-utility-bar className="hidden border-b border-border bg-hero-band md:block">
+      <div data-vision-wrap className="mx-auto flex h-14 max-w-[1680px] items-center gap-4 px-6 2xl:gap-6 3xl:px-8">
         <a
           href="https://yandex.ru/maps/?text=Тюмень, ул. Максима Горького, 59/3"
           target="_blank"
           rel="noreferrer"
-          className="hidden shrink-0 items-center gap-1.5 text-[0.84rem] text-ink transition-colors hover:text-blue md:max-lg:flex wide:flex"
+          className="hidden shrink-0 items-center gap-2 text-[0.9rem] text-ink transition-colors hover:text-blue md:max-lg:flex wide:flex"
         >
-          <IconPin className="h-4 w-4 text-ink" />
+          <IconPin className="h-[1.1rem] w-[1.1rem] text-ink" />
           {ADDRESS}
         </a>
 
-        <span aria-hidden="true" className="hidden h-6 w-px shrink-0 bg-border wide:block" />
+        <span aria-hidden="true" className="hidden h-7 w-px shrink-0 bg-muted/45 wide:block" />
 
-        <nav aria-label="Служебное меню" className="hidden items-center gap-4 xl:flex 2xl:gap-5 3xl:gap-6">
-          {utilityLinks.map((link) =>
-            link.external ? (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-md bg-blue-tint px-2.5 text-[0.84rem] font-medium text-blue transition-colors hover:bg-blue hover:text-white"
-              >
-                {link.label}
-                <IconExternal className="h-3.5 w-3.5" />
-              </a>
-            ) : (
+        <nav aria-label="Служебное меню" className="hidden items-center gap-5 xl:flex 2xl:gap-7">
+          <UtilityDropdown item={aboutNav} />
+          {utilityLinks
+            .filter((l) => !l.external)
+            .map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="whitespace-nowrap text-[0.84rem] text-ink transition-colors hover:text-blue"
+                className="whitespace-nowrap text-[0.9rem] text-ink transition-colors hover:text-blue"
               >
                 {link.label}
               </Link>
-            ),
-          )}
+            ))}
         </nav>
 
-        <div className="ml-auto flex items-center gap-3">
-          <span aria-hidden="true" className="mr-1 hidden h-6 w-px bg-border lg:block" />
+        <div className="ml-auto flex items-center gap-4">
+          <a
+            href={oldSite.href}
+            target="_blank"
+            rel="noreferrer"
+            className="hidden h-10 items-center gap-2 whitespace-nowrap rounded-xl bg-blue-tint px-4 text-[0.88rem] font-medium text-blue transition-colors hover:bg-blue hover:text-white xl:inline-flex"
+          >
+            {oldSite.label}
+            <IconExternal className="h-4 w-4" />
+          </a>
           <div className="hidden lg:block">
-            <SocialButtons />
+            <SocialButtons size="h-7 w-7" />
           </div>
-          <span aria-hidden="true" className="mx-1 hidden h-6 w-px bg-border lg:block" />
+          <span aria-hidden="true" className="hidden h-7 w-px bg-muted/45 lg:block" />
           <div className="hidden lg:block">
-            <HeaderSearch labelClassName="hidden lg:max-xl:inline 2xl:inline" />
+            <HeaderSearch labelClassName="hidden 2xl:inline" />
           </div>
           <LanguageSwitch />
-          <VisionModeToggle />
+          <VisionModeToggle className="h-10! px-5! text-[0.88rem]!" />
         </div>
       </div>
     </div>
@@ -491,7 +514,7 @@ function MobileMenu({ pathname }: { pathname: string }) {
         <div className="px-1 pb-2 pt-1">
           <HeaderSearch variant="inline" />
         </div>
-        {navItems.map((item) => (
+        {mobileNavItems.map((item) => (
           <MobileNavLink key={item.label} item={item} active={isNavItemActive(pathname, item)} />
         ))}
 
@@ -547,11 +570,13 @@ function MobileMenu({ pathname }: { pathname: string }) {
 
 /* ---------- Шапка ---------- */
 
-/** Раскрытые <details> шапки закрываются по клику в любом месте вне них и по Esc. */
+/** Раскрытые <details> шапки и верхней полосы закрываются по клику в любом месте вне них и по Esc. */
 function useCloseMenusOutside() {
   useEffect(() => {
     const openMenus = () =>
-      document.querySelectorAll<HTMLDetailsElement>("[data-site-header] details[open]");
+      document.querySelectorAll<HTMLDetailsElement>(
+        "[data-site-header] details[open], [data-utility-bar] details[open]",
+      );
     const onPointerDown = (e: PointerEvent) => {
       openMenus().forEach((d) => {
         if (!d.contains(e.target as Node)) d.open = false;
@@ -585,23 +610,26 @@ export function SiteHeader() {
         data-site-header
         className="sticky top-0 z-30 border-b border-border bg-surface shadow-[0_1px_0_rgba(16,24,40,0.02)]"
       >
-        <div className="mx-auto flex h-20 max-w-[1680px] items-center gap-3 px-6 3xl:h-[5.5rem] 3xl:gap-5 3xl:px-8">
-          <Link href="/" aria-label="Дом науки и техники, на главную" className="flex shrink-0">
-            <LogoLockup />
-          </Link>
+        <div className="mx-auto flex h-20 max-w-7xl items-center gap-3 px-6 lg:px-10 3xl:h-[5.5rem]">
+          {/* Оба логотипа выровнены по нижнему краю. */}
+          <div className="flex shrink-0 items-end gap-3">
+            <Link href="/" aria-label="Дом науки и техники, на главную" className="flex shrink-0">
+              <LogoLockup />
+            </Link>
 
-          <div data-vision-hide className="hidden shrink-0 items-center gap-3 xl:flex 3xl:gap-5">
-            <span aria-hidden="true" className="h-14 w-px bg-border" />
-            <IpbLockup />
+            <div data-vision-hide className="hidden shrink-0 items-end gap-3 xl:flex">
+              <span aria-hidden="true" className="h-14 w-px self-center bg-border" />
+              <IpbLockup />
+            </div>
           </div>
 
-          <nav aria-label="Основное меню" className="relative hidden flex-1 items-center justify-center gap-1 lg:flex 2xl:gap-2">
+          <nav aria-label="Основное меню" className="relative hidden flex-1 items-center justify-center gap-1 lg:flex">
             {navItems.map((item) => (
               <DesktopNavLink key={item.label} item={item} active={isNavItemActive(pathname, item)} />
             ))}
           </nav>
 
-          <div className="ml-auto flex items-center gap-3 3xl:gap-5">
+          <div className="ml-auto flex items-center gap-3">
             <PhoneBlock />
             <PhoneIconButton />
             <AccountButton />

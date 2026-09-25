@@ -50,3 +50,29 @@ export function SocialLinks({ size = "h-7 w-7", className = "" }: { size?: strin
     </div>
   );
 }
+
+/** Плитки соцсетей «значок над подписью» — для блоков подписки и связи. */
+export function SocialTiles({ className = "" }: { className?: string }) {
+  return (
+    <div className={`grid max-w-xs grid-cols-3 gap-2.5 sm:flex sm:max-w-none ${className}`}>
+      {socialLinks.map(({ label, href, bg, viewBox, d }) => {
+        const external = href.startsWith("http");
+        return (
+          <a
+            key={label}
+            href={href}
+            {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            className="flex h-[5.25rem] w-full flex-col items-center justify-center gap-2 rounded-2xl border border-[#E1E9F5] bg-surface text-sm font-medium text-ink shadow-[0_2px_8px_-4px_rgba(16,24,40,0.08)] transition-colors hover:border-blue hover:text-blue sm:w-[5.75rem]"
+          >
+            <span style={{ background: bg }} className="flex h-8 w-8 items-center justify-center rounded-full text-white">
+              <svg viewBox={viewBox} style={{ width: "56%", height: "56%" }} fill="currentColor" aria-hidden="true">
+                <path fillRule="evenodd" clipRule="evenodd" d={d} />
+              </svg>
+            </span>
+            {label}
+          </a>
+        );
+      })}
+    </div>
+  );
+}

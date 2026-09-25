@@ -169,18 +169,37 @@ function SocialButtons({ size = "h-7 w-7" }: { size?: string }) {
 }
 
 /** Английская версия ещё не готова: кнопка видна, но неактивна и честно говорит «скоро». */
-function LanguageSwitch() {
+/** Выбор языка. inline — список раскрывается в потоке (для прокручиваемого мобильного меню). */
+function LanguageSwitch({ inline = false }: { inline?: boolean }) {
   return (
-    <span
-      role="button"
-      aria-disabled="true"
-      title="Английская версия — скоро"
-      aria-label="English version, скоро"
-      className="inline-flex h-10 cursor-default select-none items-center gap-1.5 rounded-full bg-surface px-4 text-[0.88rem] font-semibold tracking-wide text-ink"
-    >
-      EN
-      <IconChevronDown className="h-3.5 w-3.5" />
-    </span>
+    <details name="desktop-nav" className="group relative">
+      <summary
+        aria-label="Язык сайта: русский"
+        className="inline-flex h-10 cursor-pointer list-none select-none items-center gap-1.5 rounded-full bg-surface px-4 text-[0.88rem] font-semibold tracking-wide text-ink transition-colors hover:text-blue [&::-webkit-details-marker]:hidden"
+      >
+        RU
+        <IconChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180" />
+      </summary>
+      <div
+        className={`menu-panel z-40 w-56 rounded-xl border border-border bg-surface p-2 shadow-lg ${
+          inline ? "mt-2" : "absolute right-0 top-[calc(100%+0.5rem)]"
+        }`}
+      >
+        <span className="flex items-center justify-between rounded-md bg-blue-tint px-3 py-2.5 text-sm font-medium text-blue">
+          Русский
+          <IconCheck className="h-4 w-4" />
+        </span>
+        <span
+          aria-disabled="true"
+          className="flex cursor-default items-center justify-between rounded-md px-3 py-2.5 text-sm text-muted"
+        >
+          Английский
+          <span className="rounded-full bg-gold/25 px-2 py-0.5 text-[0.68rem] font-semibold uppercase tracking-wide text-gold-dark">
+            скоро
+          </span>
+        </span>
+      </div>
+    </details>
   );
 }
 
@@ -557,8 +576,8 @@ function MobileMenu({ pathname }: { pathname: string }) {
           </div>
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
             <SocialButtons size="h-9 w-9" />
-            <div className="flex items-center gap-2 md:hidden">
-              <LanguageSwitch />
+            <div className="flex flex-wrap items-start gap-2 md:hidden">
+              <LanguageSwitch inline />
               <VisionModeToggle />
             </div>
           </div>

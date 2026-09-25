@@ -95,7 +95,11 @@ export function SiteFooter() {
             </li>
             <li className="flex items-start gap-2">
               <IconPin className="mt-0.5 h-4 w-4 shrink-0 text-white" />
-              <span>г. Тюмень, ул. Республики, 142</span>
+              <span>
+                Адрес: г. Тюмень
+                <br />
+                ул. Максима Горького, дом 59/3
+              </span>
             </li>
             <li>Время работы: Пн–Пт 9:00–18:00 (Мск)</li>
           </ul>

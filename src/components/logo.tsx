@@ -1,27 +1,16 @@
 import Image from "next/image";
 import ipbLogo from "../../public/ipb-logo.png";
+import logoMark from "../../public/logo-mark.png";
 
-/**
- * Фирменный знак «Дом науки и техники»: две синие «грани» и жёлтое основание.
- * Рисуется SVG, чтобы масштабироваться без потерь и краситься через currentColor.
- */
-export function LogoMark({ className = "h-12 w-12" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
-      <path fill="var(--blue)" d="M5 14 22 5.5v7.2L11.4 18v12.6L5 33.8Z" />
-      <path fill="var(--blue)" d="M43 14 26 5.5v7.2L36.6 18v12.6l6.4 3.2Z" />
-      <path fill="var(--blue-dark)" d="M11.4 30.6 18 27.3v6.6l-6.6 3.3Z" opacity="0.55" />
-      <path fill="var(--blue-dark)" d="M36.6 30.6 30 27.3v6.6l6.6 3.3Z" opacity="0.55" />
-      <path fill="var(--gold)" d="m24 29 8.4 4.2v7.2L24 44.6l-8.4-4.2v-7.2Z" />
-      <path fill="var(--gold-dark)" d="M24 36.4v8.2l-8.4-4.2v-7.2Z" opacity="0.5" />
-    </svg>
-  );
+/** Фирменный знак «Дом науки и техники» (public/logo-mark.png, вертикальный 4:5). */
+export function LogoMark({ className = "h-12 w-auto" }: { className?: string }) {
+  return <Image src={logoMark} alt="" aria-hidden="true" className={className} priority />;
 }
 
 export function LogoLockup({
   variant = "brand",
   textClassName = "text-[0.84rem] 3xl:text-[0.95rem]",
-  markClassName = "h-11 w-11 3xl:h-12 3xl:w-12",
+  markClassName = "h-11 w-auto 3xl:h-12",
 }: {
   variant?: "brand" | "light";
   textClassName?: string;

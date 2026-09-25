@@ -48,7 +48,7 @@ type NavItem = {
 
 const PHONE_DISPLAY = "8 800 250-41-91";
 const PHONE_HREF = "tel:88002504191";
-const ADDRESS = "г. Тюмень, ул. Республики, 142";
+const ADDRESS = "Адрес: г. Тюмень, ул. Максима Горького, дом 59/3";
 /* Адрес прежнего сайта: подставить реальный, когда будет известен. */
 const OLD_SITE_URL = "#";
 
@@ -56,7 +56,6 @@ const OLD_SITE_URL = "#";
 const utilityLinks: { label: string; href: string; external?: boolean }[] = [
   { label: "Новости", href: "/news" },
   { label: "Документы", href: "/about/documents" },
-  { label: "Вопросы и ответы", href: "/faq" },
   { label: "Контакты", href: "/contacts" },
   { label: "Старая версия сайта", href: OLD_SITE_URL, external: true },
 ];
@@ -194,7 +193,7 @@ function UtilityBar() {
     <div className="hidden border-b border-border bg-hero-band md:block">
       <div data-vision-wrap className="mx-auto flex h-11 max-w-[1680px] items-center gap-5 px-6 3xl:px-8">
         <a
-          href="https://yandex.ru/maps/?text=Тюмень, ул. Республики, 142"
+          href="https://yandex.ru/maps/?text=Тюмень, ул. Максима Горького, 59/3"
           target="_blank"
           rel="noreferrer"
           className="hidden shrink-0 items-center gap-1.5 text-[0.84rem] text-ink transition-colors hover:text-blue md:max-lg:flex wide:flex"
@@ -203,7 +202,9 @@ function UtilityBar() {
           {ADDRESS}
         </a>
 
-        <nav aria-label="Служебное меню" className="hidden items-center gap-4 xl:flex wide:ml-6 2xl:gap-5 3xl:ml-16 3xl:gap-6">
+        <span aria-hidden="true" className="hidden h-6 w-px shrink-0 bg-border wide:block" />
+
+        <nav aria-label="Служебное меню" className="hidden items-center gap-4 xl:flex 2xl:gap-5 3xl:gap-6">
           {utilityLinks.map((link) =>
             link.external ? (
               <a
@@ -229,6 +230,7 @@ function UtilityBar() {
         </nav>
 
         <div className="ml-auto flex items-center gap-3">
+          <span aria-hidden="true" className="mr-1 hidden h-6 w-px bg-border lg:block" />
           <div className="hidden lg:block">
             <SocialButtons />
           </div>
@@ -584,7 +586,7 @@ export function SiteHeader() {
         className="sticky top-0 z-30 border-b border-border bg-surface shadow-[0_1px_0_rgba(16,24,40,0.02)]"
       >
         <div className="mx-auto flex h-20 max-w-[1680px] items-center gap-3 px-6 3xl:h-[5.5rem] 3xl:gap-5 3xl:px-8">
-          <Link href="/" aria-label="Дом науки и техники, на главную" className="shrink-0">
+          <Link href="/" aria-label="Дом науки и техники, на главную" className="flex shrink-0">
             <LogoLockup />
           </Link>
 

@@ -6,10 +6,13 @@ export function Reveal({
   children,
   className = "",
   delayMs = 0,
+  subtle = false,
 }: {
   children: ReactNode;
   className?: string;
   delayMs?: number;
+  /** Короткий сдвиг без масштаба — для отдельных элементов списка, а не крупных блоков. */
+  subtle?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   // Default to visible: content must never depend on JS running to be seen.
@@ -45,7 +48,11 @@ export function Reveal({
       ref={ref}
       style={delayMs ? { transitionDelay: `${delayMs}ms` } : undefined}
       className={`transition-all duration-500 ease-out ${
-        visible ? "translate-y-0 scale-100 opacity-100" : "translate-y-16 scale-[0.96] opacity-0"
+        visible
+          ? "translate-y-0 scale-100 opacity-100"
+          : subtle
+            ? "translate-y-4 opacity-0"
+            : "translate-y-16 scale-[0.96] opacity-0"
       } ${className}`}
     >
       {children}

@@ -16,6 +16,10 @@ import { SectionHeading } from "@/components/section-heading";
 import { programs, getProgramById, getRelatedPrograms, typePlural } from "@/lib/programs";
 import { getProgramDetail } from "@/lib/program-details";
 import { getLecturersByProgramId } from "@/lib/lecturers";
+import { getProgramReviews, reviews } from "@/lib/reviews";
+import { ReviewCard } from "@/components/review-card";
+import { ContactButton } from "@/components/contact-dialog";
+import { Reveal } from "@/components/reveal";
 import { IconFile, IconTarget, IconUser, IconCalendar } from "@/components/icons";
 
 export function generateStaticParams() {
@@ -44,6 +48,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
   const detail = getProgramDetail(program);
   const related = getRelatedPrograms(program);
   const lecturers = getLecturersByProgramId(program.id);
+  const programReviews = getProgramReviews(lecturers.map((l) => l.id));
 
   return (
     <>
@@ -114,11 +119,30 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
 
               <section id="reviews" className="scroll-mt-32">
                 <SectionHeading icon={<IconTarget className="h-5 w-5" />}>Отзывы</SectionHeading>
-                <div className="mt-4 rounded-xl border border-dashed border-border py-10 text-center">
-                  <p className="text-ink">Отзывов пока нет.</p>
-                  <p className="mt-1 text-sm text-muted">
-                    Пройдите программу и поделитесь впечатлениями — вашим отзывом откроем этот раздел.
-                  </p>
+                <p className="mt-2 text-sm text-body">
+                  {programReviews.aboutLecturer
+                    ? "Отзывы слушателей о преподавателе этой программы."
+                    : "Отзывов именно об этой программе пока нет — вот что говорят слушатели о центре."}
+                </p>
+                <ul className="mt-4 grid gap-4 md:grid-cols-2">
+                  {programReviews.reviews.map((r, i) => (
+                    <li key={r.id}>
+                      <Reveal subtle delayMs={(i % 2) * 70} className="h-full">
+                        <ReviewCard review={r} />
+                      </Reveal>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-4 flex flex-wrap items-center gap-4">
+                  <Link href="/reviews" className="text-sm font-medium text-blue hover:text-blue-dark">
+                    Все отзывы ({reviews.length})
+                  </Link>
+                  <ContactButton
+                    topic={`Отзыв: ${program.title}`}
+                    className="inline-flex h-10 items-center gap-2 rounded-lg border border-border px-4 text-sm font-medium text-ink transition-colors hover:border-blue hover:text-blue"
+                  >
+                    Оставить отзыв
+                  </ContactButton>
                 </div>
               </section>
 

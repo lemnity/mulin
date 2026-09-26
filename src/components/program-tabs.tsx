@@ -3,17 +3,21 @@
 import { useEffect, useState } from "react";
 import { IconHeartOutline, IconShare } from "@/components/icons";
 
-const tabs = [
+const allTabs = [
   { id: "about", label: "О программе" },
-  { id: "agenda", label: "Программа" },
+  { id: "agenda", label: "Расписание" },
   { id: "speaker", label: "Лектор" },
   { id: "documents", label: "Документы" },
   { id: "reviews", label: "Отзывы" },
 ];
 
-export function ProgramTabs() {
+/* Расписание занятий есть не у всех программ: у части выгрузки время указано как
+   «согласно расписанию», и блок не выводится. Какие разделы на странице есть, знает
+   страница — она и передаёт список, иначе вкладка вела бы в никуда. */
+export function ProgramTabs({ sectionIds }: { sectionIds: string[] }) {
   const [active, setActive] = useState("about");
   const [saved, setSaved] = useState(false);
+  const tabs = allTabs.filter((t) => sectionIds.includes(t.id));
 
   useEffect(() => {
     const sections = tabs
@@ -33,7 +37,8 @@ export function ProgramTabs() {
 
     sections.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- состав вкладок задан пропом и не меняется в течение жизни страницы
+  }, [sectionIds.join(",")]);
 
   function handleShare() {
     if (typeof navigator !== "undefined" && navigator.share) {
@@ -51,8 +56,11 @@ export function ProgramTabs() {
             <a
               key={tab.id}
               href={`#${tab.id}`}
+              aria-current={active === tab.id ? "true" : undefined}
               className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                active === tab.id ? "bg-blue text-white" : "bg-[#f4f5f8] text-ink hover:text-ink"
+                active === tab.id
+                  ? "bg-blue text-white"
+                  : "bg-[#f4f5f8] text-body hover:bg-blue-tint hover:text-blue"
               }`}
             >
               {tab.label}

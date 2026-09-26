@@ -3,6 +3,8 @@
  * id — ключ страницы преподавателя /about/teachers/<id>. programs — предстоящие семинары
  * лектора с открытой записью. Сгенерировано, при следующем переносе пересобирается.
  */
+import { cleanText } from "@/lib/program-content";
+
 export type LecturerProgram = {
   id: string;
   title: string;
@@ -20,7 +22,7 @@ export type Lecturer = {
   programs: LecturerProgram[];
 };
 
-export const lecturers: Lecturer[] = [
+const rawLecturers: Lecturer[] = [
   {
     id: "77",
     name: "Поперека Галина Сергеевна",
@@ -321,6 +323,17 @@ export const lecturers: Lecturer[] = [
     programs: [],
   },
 ];
+
+/* Биографии и названия семинаров приехали из той же БД, что и программы, и с теми же
+   следами вёрстки: «член Союза экономистов РФ , член…», «юрист-эксперт- консультант»,
+   «2000 по 2025 г.г. - главный редактор». Прогоняем через общую чистку, чтобы на экране
+   не было двух разных типографик. */
+export const lecturers: Lecturer[] = rawLecturers.map((lecturer) => ({
+  ...lecturer,
+  name: cleanText(lecturer.name),
+  bio: cleanText(lecturer.bio),
+  programs: lecturer.programs.map((program) => ({ ...program, title: cleanText(program.title) })),
+}));
 
 export function getLecturerById(id: string) {
   return lecturers.find((l) => l.id === id);

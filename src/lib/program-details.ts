@@ -1,4 +1,5 @@
 import type { Program } from "@/lib/programs";
+import { getProgramView, typeAccusative } from "@/lib/program-content";
 
 export type AgendaItem = {
   title: string;
@@ -7,15 +8,17 @@ export type AgendaItem = {
 
 export type ProgramDetail = {
   aboutParagraphs: string[];
+  /** Перечень вопросов программы, если его удалось выделить из описания. */
+  outline: string[];
   audience: string[];
+  /** «Для кого этот вебинар / семинар / курс» — заголовок зависит от типа программы. */
+  audienceTitle: string;
   agenda: AgendaItem[];
   speakerBio: string;
   speakerPhoto?: string;
   documentName: string;
   documentSize: string;
   platformLabel: string;
-  heroPhoto: string;
-  heroQuote: string;
 };
 
 const overrides: Record<string, Partial<ProgramDetail>> = {
@@ -45,48 +48,79 @@ const overrides: Record<string, Partial<ProgramDetail>> = {
     documentName: "Информационное письмо.pdf",
     documentSize: "PDF, 1.2 МБ",
     platformLabel: "На платформе Дома НТ",
-    heroPhoto: "/program-hero-photo.jpg",
-    heroQuote: "Актуальные знания сегодня — стабильный бизнес завтра",
   },
 };
 
-function splitTimeRange(timeRange: string): [string, string] {
-  const match = timeRange.match(/(\d{2}:\d{2})\D+(\d{2}:\d{2})/);
-  return match ? [match[1], match[2]] : ["09:00", "13:00"];
-}
-
+/* Расписание занятий строилось от времени, разобранного шаблоном `\d{2}:\d{2}`, но в
+   выгрузке время записано через дефис — «с 08-00 до 11-00». Шаблон не совпадал никогда,
+   и расписание всегда начиналось с подставного 09:00: на странице вебинара 08:00–11:00
+   план занятий показывал 09:00–12:45. Теперь берём часы из общего разбора. */
 function genericAgenda(program: Program): AgendaItem[] {
-  const [start] = splitTimeRange(program.timeRange);
-  const [h, m] = start.split(":").map(Number);
-  const blocks = ["Вводная часть и постановка задач", "Основной блок и разбор кейсов", "Ответы на вопросы участников"];
-  return blocks.map((title, i) => {
-    const from = new Date(2000, 0, 1, h, m + i * 75);
-    const to = new Date(2000, 0, 1, h, m + (i + 1) * 75);
-    const fmt = (d: Date) => `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
-    return { title, time: `${fmt(from)}–${fmt(to)}` };
+  const { startMinutes, endMinutes } = getProgramView(program).time;
+  if (startMinutes === null || endMinutes === null || endMinutes <= startMinutes) return [];
+
+  const blocks = [
+    "Вводная часть и постановка задач",
+    "Основной блок и разбор практики",
+    "Ответы на вопросы участников",
+  ];
+
+  const total = endMinutes - startMinutes;
+  // Длинные программы идут с перерывом; на коротких он съел бы половину времени.
+  const breakMinutes = total >= 300 ? 60 : total >= 180 ? 30 : 0;
+  const blockLength = Math.floor((total - breakMinutes) / blocks.length);
+  const fmt = (minutes: number) =>
+    `${String(Math.floor(minutes / 60) % 24).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
+
+  let cursor = startMinutes;
+  const items: AgendaItem[] = [];
+
+  blocks.forEach((title, i) => {
+    const from = cursor;
+    const to = i === blocks.length - 1 ? endMinutes : from + blockLength;
+    items.push({ title, time: `${fmt(from)}–${fmt(to)}` });
+    cursor = to;
+    if (breakMinutes > 0 && i === 0) {
+      items.push({ title: "Перерыв", time: `${fmt(cursor)}–${fmt(cursor + breakMinutes)}` });
+      cursor += breakMinutes;
+    }
   });
+
+  return items;
 }
 
 export function getProgramDetail(program: Program): ProgramDetail {
   const override = overrides[program.id];
 
+  const view = getProgramView(program);
+  const kind = typeAccusative[program.type];
+
+  // Раньше в «О программе» попадало то же усечённое описание, что и в карточке каталога,
+  // — на детальной странице это выглядело как оборванный текст. Берём полное вступление,
+  // а разобранный перечень вопросов показываем отдельным списком.
+  const aboutParagraphs = [
+    view.intro,
+    view.outline.length === 0
+      ? `На программе вы получите практические рекомендации, разбор актуальных изменений и ответы лектора на вопросы по теме.`
+      : "",
+  ].filter(Boolean);
+
   const fallback: ProgramDetail = {
-    aboutParagraphs: [
-      program.description,
-      "На программе вы получите практические рекомендации, разбор актуальных изменений и ответы лектора на вопросы по теме.",
-    ],
+    aboutParagraphs,
+    outline: view.outline,
     audience: [
-      `Специалисты по направлению «${program.categories[0]}»`,
+      view.category ? `Специалисты по направлению «${view.category}»` : "Специалисты профильных служб",
       "Руководители и специалисты, которым нужно актуализировать знания",
       "Все, кто хочет уверенно применять изменения на практике",
     ],
+    audienceTitle: `Для кого этот ${kind}`,
     agenda: genericAgenda(program),
-    speakerBio: `${program.speaker} — практикующий эксперт по теме программы, регулярно проводит семинары и консультирует по сложным вопросам практики.`,
+    speakerBio: view.speaker
+      ? `${view.speaker} — практикующий эксперт по теме программы, регулярно проводит занятия и консультирует по сложным вопросам практики.`
+      : "Лектор будет объявлен ближе к дате проведения. Программу ведут практикующие эксперты — аудиторы, юристы и консультанты.",
     documentName: "Информационное письмо.pdf",
     documentSize: "PDF, 0.6 МБ",
-    platformLabel: program.format === "Онлайн" ? "На платформе Дома НТ" : program.location,
-    heroPhoto: "/program-hero-photo.jpg",
-    heroQuote: "Актуальные знания сегодня — стабильный бизнес завтра",
+    platformLabel: view.place.detail ?? view.place.label,
   };
 
   return { ...fallback, ...override };

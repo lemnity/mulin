@@ -10,7 +10,7 @@ import type { Lecturer } from "@/lib/lecturers";
  * Секция «Лектор» программы. Если удалось найти реальных преподавателей этой программы
  * (по id в базе лекторов) — показываем их профиль и ссылку на страницу; если их несколько,
  * добавляем переключатель. Иначе — то, что известно из данных самой программы (имя может
- * быть «Уточняется», для него отдельного описания не выдумываем).
+ * не назначен — так и пишем, вместо карточки с инициалами несуществующего человека).
  */
 export function ProgramSpeaker({
   lecturers,
@@ -19,14 +19,15 @@ export function ProgramSpeaker({
   fallbackPhoto,
 }: {
   lecturers: Lecturer[];
-  fallbackName: string;
+  /** null — лектор ещё не назначен; выдуманное имя вроде «Уточняется» сюда не приходит. */
+  fallbackName: string | null;
   fallbackBio: string;
   fallbackPhoto?: string;
 }) {
   const [activeId, setActiveId] = useState(lecturers[0]?.id);
 
   if (lecturers.length === 0) {
-    if (fallbackName === "Уточняется") {
+    if (!fallbackName) {
       return (
         <div className="rounded-xl border border-dashed border-border p-6 text-center">
           <p className="text-sm text-body">

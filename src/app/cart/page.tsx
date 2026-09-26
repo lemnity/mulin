@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { orderLabel, useCart } from "@/lib/cart-context";
+import { getProgramView } from "@/lib/program-content";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import {
@@ -52,6 +53,7 @@ export default function CartPage() {
                     day: "2-digit",
                     month: "short",
                   });
+                  const view = getProgramView(program);
                   return (
                     <article
                       key={program.id}
@@ -59,23 +61,23 @@ export default function CartPage() {
                     >
                       <div className="min-w-0">
                         <p className="text-xs font-medium tracking-wide text-blue uppercase">
-                          {program.categories[0]}
+                          {view.category}
                         </p>
                         <h2 className="mt-1 text-balance text-base font-bold leading-snug text-ink">
-                          {program.title}
+                          {view.title}
                         </h2>
                         <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-ink">
                           <span className="flex items-center gap-1.5">
                             <IconClock className="h-3.5 w-3.5 text-blue" />
-                            {day}, {program.timeRange}
+                            {day}, {view.time.label}
                           </span>
                           <span className="flex items-center gap-1.5">
-                            {program.format === "Онлайн" ? (
+                            {view.place.label === "Онлайн" ? (
                               <IconMonitor className="h-3.5 w-3.5 text-blue" />
                             ) : (
                               <IconPin className="h-3.5 w-3.5 text-blue" />
                             )}
-                            {program.location}
+                            {view.place.label}
                           </span>
                           {program.hasCertificate && (
                             <span className="flex items-center gap-1.5">

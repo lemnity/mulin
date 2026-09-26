@@ -1,10 +1,8 @@
-import { audienceRoles, speakerRoster, type ProgramFormat, type ProgramType } from "@/lib/programs";
+import type { ProgramFormat, ProgramType } from "@/lib/programs";
+import { audienceFacets, formatFacets, speakerFacets, typeFacets } from "@/lib/program-facets";
 import { FilterCheckboxGroup } from "@/components/filter-checkbox-group";
 import { FilterDropdown } from "@/components/filter-dropdown";
 import { IconReset } from "@/components/icons";
-
-const typeOptions: ProgramType[] = ["Семинар", "Курс", "Вебинар"];
-const formatOptions: ProgramFormat[] = ["Онлайн", "Очно"];
 
 export type FiltersState = {
   types: ReadonlySet<ProgramType>;
@@ -42,7 +40,7 @@ export function FiltersPanel({
     <div className="flex flex-wrap items-center gap-2">
       <FilterDropdown label="Тип" count={state.types.size}>
         <FilterCheckboxGroup
-          options={typeOptions}
+          options={typeFacets}
           selected={state.types}
           onToggle={(v) => onToggleType(v as ProgramType)}
         />
@@ -50,7 +48,7 @@ export function FiltersPanel({
 
       <FilterDropdown label="Специализация" count={state.audiences.size} panelClassName="w-80">
         <FilterCheckboxGroup
-          options={audienceRoles}
+          options={audienceFacets}
           selected={state.audiences}
           onToggle={onToggleAudience}
           scroll
@@ -59,7 +57,7 @@ export function FiltersPanel({
 
       <FilterDropdown label="Формат" count={state.formats.size}>
         <FilterCheckboxGroup
-          options={formatOptions}
+          options={formatFacets}
           selected={state.formats}
           onToggle={(v) => onToggleFormat(v as ProgramFormat)}
         />
@@ -90,7 +88,7 @@ export function FiltersPanel({
 
       <FilterDropdown label="Лектор" count={state.speakers.size} panelClassName="w-72">
         <FilterCheckboxGroup
-          options={speakerRoster}
+          options={speakerFacets}
           selected={state.speakers}
           onToggle={onToggleSpeaker}
           scroll

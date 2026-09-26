@@ -1,6 +1,12 @@
 import Link from "next/link";
 import type { Program } from "@/lib/programs";
-import { IconArrowRight, IconClock, IconMonitor, IconPin } from "@/components/icons";
+import { getProgramView } from "@/lib/program-content";
+import {
+  IconArrowRight,
+  IconClock,
+  IconMonitor,
+  IconPin,
+} from "@/components/icons";
 
 const typeBadge: Record<Program["type"], string> = {
   Вебинар: "bg-blue-tint text-blue",
@@ -8,53 +14,50 @@ const typeBadge: Record<Program["type"], string> = {
   Курс: "bg-amber-tint text-amber-text",
 };
 
-/** Короткое время начала вида «08:00» из строки «с 08-00 до 11-00 часов…», иначе исходный текст как есть. */
-function shortStartTime(timeRange: string) {
-  const match = timeRange.match(/(\d{2})-(\d{2})/);
-  return match ? `${match[1]}:${match[2]}` : timeRange;
-}
-
 export function RelatedPrograms({ items }: { items: Program[] }) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-      {items.map((program) => (
-        <Link
-          key={program.id}
-          href={`/programs/${program.id}`}
-          className="group flex flex-col rounded-xl border border-border p-5 transition-colors hover:border-blue"
-        >
-          <div className="flex items-center gap-2.5">
-            <span
-              className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${typeBadge[program.type]}`}
-            >
-              {program.type}
-            </span>
-            <span className="text-xs text-muted">{program.dateLabel}</span>
-          </div>
-          <p className="mt-3 flex-1 text-[0.95rem] font-semibold leading-snug text-ink">
-            {program.title}
-          </p>
-          <div className="mt-3 flex items-center justify-between">
-            <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted">
-              <span className="flex items-center gap-1">
-                {program.format === "Онлайн" ? (
-                  <IconMonitor className="h-3.5 w-3.5" />
-                ) : (
-                  <IconPin className="h-3.5 w-3.5" />
-                )}
-                {program.format}
+      {items.map((program) => {
+        const view = getProgramView(program);
+        return (
+          <Link
+            key={program.id}
+            href={`/programs/${program.id}`}
+            className="group flex flex-col rounded-xl border border-border p-5 transition-colors hover:border-blue"
+          >
+            <div className="flex items-center gap-2.5">
+              <span
+                className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${typeBadge[program.type]}`}
+              >
+                {program.type}
               </span>
-              <span className="flex items-center gap-1">
-                <IconClock className="h-3.5 w-3.5" />
-                {shortStartTime(program.timeRange)}
+              <span className="text-xs text-muted">{program.dateLabel}</span>
+            </div>
+            <p className="mt-3 line-clamp-3 flex-1 text-[0.95rem] font-semibold leading-snug text-ink">
+              {view.title}
+            </p>
+            <div className="mt-3 flex items-center justify-between">
+              <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted">
+                <span className="flex items-center gap-1">
+                  {view.place.label === "Онлайн" ? (
+                    <IconMonitor className="h-3.5 w-3.5" />
+                  ) : (
+                    <IconPin className="h-3.5 w-3.5" />
+                  )}
+                  {view.place.label}
+                </span>
+                <span className="flex items-center gap-1">
+                  <IconClock className="h-3.5 w-3.5" />
+                  {view.time.label}
+                </span>
+              </div>
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-tint text-blue transition-colors group-hover:bg-blue group-hover:text-white">
+                <IconArrowRight className="h-4 w-4" />
               </span>
             </div>
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-tint text-blue transition-colors group-hover:bg-blue group-hover:text-white">
-              <IconArrowRight className="h-4 w-4" />
-            </span>
-          </div>
-        </Link>
-      ))}
+          </Link>
+        );
+      })}
     </div>
   );
 }

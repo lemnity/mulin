@@ -3,25 +3,9 @@
 import { useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { speakerRoster } from "@/lib/programs";
+import { monthFacets, popularQueries, speakerFacets } from "@/lib/program-facets";
 import { IconChevronDown, IconSearch, IconSliders } from "@/components/icons";
 import { beginPageTransition } from "@/components/page-loader";
-
-const popularQueries = [
-  "НДС",
-  "Бухгалтерский учёт",
-  "Заработная плата",
-  "Кадровое делопроизводство",
-  "Госзакупки",
-  "Охрана труда",
-];
-
-/* Месяц → диапазон дат для фильтра расписания (`dateFrom`/`dateTo`). */
-const monthOptions = [
-  { value: "2026-09", label: "Сентябрь 2026", from: "2026-09-01", to: "2026-09-30" },
-  { value: "2026-10", label: "Октябрь 2026", from: "2026-10-01", to: "2026-10-31" },
-  { value: "2026-11", label: "Ноябрь 2026", from: "2026-11-01", to: "2026-11-30" },
-];
 
 /** Сегмент поисковой строки: подпись сверху, значение снизу, как в референсе. */
 function Segment({
@@ -93,7 +77,7 @@ export function HomeSearchBand() {
     const params = new URLSearchParams();
     if (query.trim()) params.set("q", query.trim());
     if (format) params.set("format", format);
-    const m = monthOptions.find((o) => o.value === month);
+    const m = monthFacets.find((o) => o.value === month);
     if (m) {
       params.set("dateFrom", m.from);
       params.set("dateTo", m.to);
@@ -142,7 +126,7 @@ export function HomeSearchBand() {
                 name="q"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Название, тема или лектор"
+                placeholder="Название или тема"
                 autoComplete="off"
                 enterKeyHint="search"
                 className="focus-quiet w-full bg-transparent text-[1.05rem] font-semibold text-ink placeholder:font-medium placeholder:text-ink/60"
@@ -166,8 +150,8 @@ export function HomeSearchBand() {
             <SegmentSelect
               value={month}
               onChange={setMonth}
-              placeholder="Когда"
-              options={monthOptions.map((m) => ({ value: m.value, label: m.label }))}
+              placeholder="Любая"
+              options={monthFacets.map((m) => ({ value: m.value, label: `${m.label} — ${m.count}` }))}
             />
           </Segment>
 
@@ -176,7 +160,7 @@ export function HomeSearchBand() {
               value={speaker}
               onChange={setSpeaker}
               placeholder="Любой"
-              options={speakerRoster.map((s) => ({ value: s, label: s }))}
+              options={speakerFacets.map((f) => ({ value: f.value, label: f.value }))}
             />
           </Segment>
 

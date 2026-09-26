@@ -15,6 +15,7 @@ import { ParticipationSidebar } from "@/components/participation-sidebar";
 import { SectionHeading } from "@/components/section-heading";
 import { programs, getProgramById, getRelatedPrograms, typePlural } from "@/lib/programs";
 import { getProgramDetail } from "@/lib/program-details";
+import { getProgramView } from "@/lib/program-content";
 import { getLecturersByProgramId } from "@/lib/lecturers";
 import { getProgramReviews, reviews } from "@/lib/reviews";
 import { ReviewCard } from "@/components/review-card";
@@ -34,9 +35,10 @@ export async function generateMetadata({
   const { id } = await params;
   const program = getProgramById(id);
   if (!program) return {};
+  const view = getProgramView(program);
   return {
-    title: `${program.title} — Дом науки и техники`,
-    description: program.description,
+    title: `${view.title} — Дом науки и техники`,
+    description: view.summary,
   };
 }
 
@@ -45,6 +47,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
   const program = getProgramById(id);
   if (!program) notFound();
 
+  const view = getProgramView(program);
   const detail = getProgramDetail(program);
   const related = getRelatedPrograms(program);
   const lecturers = getLecturersByProgramId(program.id);
@@ -58,13 +61,21 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
           { label: "Главная", href: "/" },
           { label: "Расписание", href: "/schedule" },
           { label: typePlural[program.type], href: "/schedule" },
-          { label: program.title },
+          { label: view.title },
         ]}
       />
 
       <main id="main" className="flex-1">
         <ProgramHero program={program} detail={detail} />
-        <ProgramTabs />
+        <ProgramTabs
+          sectionIds={[
+            "about",
+            ...(detail.agenda.length > 0 ? ["agenda"] : []),
+            "speaker",
+            "documents",
+            "reviews",
+          ]}
+        />
 
         <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10 lg:py-12">
           <div className="grid gap-10 lg:grid-cols-[1fr_320px] lg:gap-14">
@@ -76,17 +87,40 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
                     <p key={i}>{p}</p>
                   ))}
                 </div>
+
+                {detail.outline.length > 0 && (
+                  <div className="mt-5">
+                    <p className="text-[0.95rem] font-semibold text-ink">Вопросы программы</p>
+                    <ul className="mt-3 flex flex-col gap-2.5">
+                      {detail.outline.map((item, i) => (
+                        <li key={i} className="flex gap-3 text-[0.95rem] leading-relaxed text-body">
+                          <span className="tabular mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-blue-tint text-xs font-semibold text-blue">
+                            {i + 1}
+                          </span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
                 <div className="mt-5">
-                  <AudienceBox items={detail.audience} />
+                  <AudienceBox title={detail.audienceTitle} items={detail.audience} />
                 </div>
               </section>
 
-              <section id="agenda" className="scroll-mt-32">
-                <SectionHeading icon={<IconCalendar className="h-5 w-5" />}>Программа</SectionHeading>
-                <div className="mt-4">
-                  <AgendaList items={detail.agenda} />
-                </div>
-              </section>
+              {/* Расписание занятий строится из времени программы. Если в выгрузке стоит
+                  «согласно расписанию», часов нет — выдуманный план показывать нельзя. */}
+              {detail.agenda.length > 0 && (
+                <section id="agenda" className="scroll-mt-32">
+                  <SectionHeading icon={<IconCalendar className="h-5 w-5" />}>
+                    Расписание занятий
+                  </SectionHeading>
+                  <div className="mt-4">
+                    <AgendaList items={detail.agenda} />
+                  </div>
+                </section>
+              )}
 
               <section id="speaker" className="scroll-mt-32">
                 <div className="flex items-center justify-between">
@@ -103,7 +137,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
                 <div className="mt-4">
                   <ProgramSpeaker
                     lecturers={lecturers}
-                    fallbackName={program.speaker}
+                    fallbackName={view.speaker}
                     fallbackBio={detail.speakerBio}
                     fallbackPhoto={detail.speakerPhoto}
                   />
@@ -138,7 +172,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
                     Все отзывы ({reviews.length})
                   </Link>
                   <ContactButton
-                    topic={`Отзыв: ${program.title}`}
+                    topic={`Отзыв: ${view.title}`}
                     className="inline-flex h-10 items-center gap-2 rounded-lg border border-border px-4 text-sm font-medium text-ink transition-colors hover:border-blue hover:text-blue"
                   >
                     Оставить отзыв
@@ -166,7 +200,23 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
               )}
             </div>
 
-            <ParticipationSidebar program={program} detail={detail} />
+            {/* Объект собирается полем за полем, а не передаётся целиком: Pick<> — это
+                только тип, на сериализацию он не влияет, и весь Program (вместе с сырым
+                описанием) уезжал бы в разметку страницы. */}
+            <ParticipationSidebar
+              program={{
+                id: program.id,
+                type: program.type,
+                price: program.price,
+                dateLabel: program.dateLabel,
+                weekday: program.weekday,
+                format: program.format,
+                hasCertificate: program.hasCertificate,
+                hasLetter: program.hasLetter,
+              }}
+              view={{ title: view.title, time: view.time }}
+              detail={{ platformLabel: detail.platformLabel, documentSize: detail.documentSize }}
+            />
           </div>
         </div>
       </main>

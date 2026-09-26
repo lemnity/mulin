@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { inter } from "@/lib/fonts";
 import { CartProvider } from "@/lib/cart-context";
 import { CartFloatingBar } from "@/components/cart-floating-bar";
 import { RouteTransitionLoader } from "@/components/page-loader";
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ru" className="h-full antialiased">
+    <html lang="ru" className={`h-full antialiased ${inter.variable}`}>
       <body className="min-h-full flex flex-col bg-page text-ink font-sans">
         <CartProvider>
           {children}

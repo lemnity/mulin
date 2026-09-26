@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FOUNDED_YEAR, programCount, yearsOnMarket, yearsWord } from "@/lib/center-facts";
 import { HeroPhoto } from "@/components/hero-photo";
 import {
   IconArrowRight,
@@ -9,9 +10,11 @@ import {
   IconUsers,
 } from "@/components/icons";
 
+/* Стаж центра показан крупной цифрой на фотопанели, поэтому в строке фактов его нет:
+   раньше «Более 25 лет» стояло и там, и там, и ещё двумя блоками ниже. */
 const trustPoints = [
-  { icon: IconGraduationCap, title: "Более 25 лет", subtitle: "на рынке образования" },
-  { icon: IconUsers, title: "Сотни актуальных", subtitle: "программ ежегодно" },
+  { icon: IconGraduationCap, title: `С ${FOUNDED_YEAR} года`, subtitle: "на рынке образования" },
+  { icon: IconUsers, title: `${programCount} программ`, subtitle: "в открытом расписании" },
   { icon: IconTrendUp, title: "Доверяют специалисты", subtitle: "по всей России" },
   { icon: IconFile, title: "Лицензия", subtitle: "на образовательную деятельность" },
 ];
@@ -21,6 +24,8 @@ const glassCard =
   "absolute rounded-2xl border border-white/70 shadow-[0_10px_30px_rgba(16,24,40,0.12)] backdrop-blur-sm";
 
 export function HomeHero() {
+  const years = yearsOnMarket();
+
   return (
     <section className="relative overflow-hidden bg-hero-band">
       {/* мягкий голубой отсвет справа сверху, чтобы фон не был плоским */}
@@ -30,13 +35,18 @@ export function HomeHero() {
       />
 
       <div className="relative mx-auto max-w-7xl px-6 pb-24 pt-12 lg:px-10 lg:pb-28 lg:pt-16">
-        <div className="grid gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:gap-14">
+        <div className="grid gap-12 lg:grid-cols-[1.12fr_0.88fr] lg:items-center lg:gap-14">
           <div>
             <p className="text-xs font-semibold tracking-[0.12em] text-blue uppercase">
               Повышение квалификации и профессиональное обучение
             </p>
-            <h1 className="mt-4 max-w-[17ch] text-[2.6rem] font-extrabold leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-[3.6rem]">
-              Знания сегодня — ваш уверенный завтра
+            {/* Ширину строки держит text-balance, а не max-width. Прежний потолок 17ch
+                обрезал заголовок до 490 px в колонке шириной 618 и разбивал его на четыре
+                рваные строки («Знания» / «сегодня — ваш» / «уверенный» / «завтра») —
+                колонка выглядела уже, чем абзац под ней. Размер плавный: на промежуточных
+                ширинах фиксированные 3.6rem тоже не помещались в две строки. */}
+            <h1 className="mt-4 text-balance text-[2.6rem] font-extrabold leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-[clamp(2.8rem,5vw-0.4rem,3.6rem)]">
+              Знания сегодня&nbsp;— ваш уверенный завтра
             </h1>
             <p className="mt-6 max-w-[56ch] text-[1.05rem] leading-relaxed text-body lg:text-[1.1rem]">
               Семинары, курсы и вебинары для бухгалтеров, кадровиков, юристов, руководителей
@@ -76,7 +86,14 @@ export function HomeHero() {
           <div className="relative mx-auto aspect-square w-full max-w-[34rem] lg:max-w-none">
             <HeroPhoto className="rounded-3xl" />
 
-            <div className={`${glassCard} -left-2 top-[22%] flex max-w-[14rem] items-center gap-3 bg-white/85 p-4 sm:-left-6 sm:top-1/2 sm:-translate-y-1/2`}>
+            {/* Карточка показывается не везде. На телефоне обе накрывали снимок целиком —
+                лицо на фото полностью уходило под них. А в диапазоне 1024–1279 фотоколонка
+                сжимается до ~400 px, и две карточки (224 + 272) перестают помещаться рядом:
+                замерено перекрытие 93×66 px. Поэтому здесь остаётся только карточка со
+                стажем, а вторая возвращается с xl, где колонка снова 503 px. */}
+            <div
+              className={`${glassCard} hidden max-w-[14rem] items-center gap-3 bg-white/85 p-4 sm:-left-6 sm:top-1/2 sm:flex sm:-translate-y-1/2 lg:hidden xl:flex`}
+            >
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-tint text-blue">
                 <IconMonitor className="h-5 w-5" />
               </span>
@@ -96,9 +113,11 @@ export function HomeHero() {
               </svg>
             </p>
 
-            <div className={`${glassCard} bottom-3 right-3 flex min-h-[10rem] min-w-[12rem] flex-col justify-center bg-white p-5 sm:min-h-[12.5rem] sm:min-w-[17rem] sm:p-6`}>
-              <span className="block text-sm text-body">Более</span>
-              <span className="tabular block text-[2.4rem] font-extrabold leading-none text-ink">25 лет</span>
+            <div className={`${glassCard} bottom-3 right-3 flex min-h-[8.5rem] min-w-[10.5rem] flex-col justify-center bg-white p-4 sm:min-h-[12.5rem] sm:min-w-[17rem] sm:p-6`}>
+              <span className="block text-sm text-body">Уже</span>
+              <span className="tabular block text-[2rem] font-extrabold leading-none text-ink sm:text-[2.4rem]">
+                {years} {yearsWord(years)}
+              </span>
               <span className="mt-1.5 block text-sm leading-snug text-body">
                 развиваем
                 <br />

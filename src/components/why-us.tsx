@@ -1,11 +1,14 @@
 import { Reveal } from "@/components/reveal";
+import { FOUNDED_YEAR } from "@/lib/center-facts";
 import { IconDiamond, IconDocumentLines, IconLaptop, IconTeam } from "@/components/icons";
 
 const features = [
   {
     icon: IconDiamond,
-    title: "Более 25 лет опыта",
-    desc: "С 1998 года на рынке профессионального образования",
+    // Стаж центра вынесен на обложку цифрой; здесь он дублировался третий раз подряд,
+    // поэтому говорим о том, чего на обложке нет, — о признании программ.
+    title: `На рынке с ${FOUNDED_YEAR} года`,
+    desc: "Аккредитации и лицензия на образовательную деятельность",
   },
   {
     icon: IconTeam,

@@ -469,14 +469,20 @@ function AccountButton() {
 
 /* ---------- Мобильное меню ---------- */
 
+/* Пункты меню были высотой 36 px при рекомендованных 44 (Apple HIG) и 48 (Material):
+   в списке из полутора десятков ссылок подряд это даёт промахи по соседнему пункту.
+   Высота задана min-h, а не фиксированным h: длинные названия переносятся в две строки. */
+const MOBILE_LINK = "flex min-h-11 items-center rounded-md px-3 text-[0.95rem] transition-colors";
+const MOBILE_SUBLINK = "flex min-h-11 items-center gap-2 rounded-md px-3 text-sm text-body transition-colors hover:bg-blue-tint hover:text-blue";
+
 function MobileNavLink({ item, active }: { item: NavItem; active: boolean }) {
   if (!item.children && !item.columns) {
     return (
       <Link
         href={item.href!}
         aria-current={active ? "page" : undefined}
-        className={`block rounded-md px-3 py-2.5 text-[0.95rem] ${
-          active ? "font-medium text-blue" : "text-ink hover:text-ink"
+        className={`${MOBILE_LINK} ${
+          active ? "bg-blue-tint font-medium text-blue" : "text-ink hover:bg-blue-tint hover:text-blue"
         }`}
       >
         {item.label}
@@ -486,9 +492,11 @@ function MobileNavLink({ item, active }: { item: NavItem; active: boolean }) {
 
   return (
     <details className="group/sub">
-      <summary className="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2.5 text-[0.95rem] text-ink [&::-webkit-details-marker]:hidden">
+      <summary
+        className={`${MOBILE_LINK} cursor-pointer list-none justify-between text-ink [&::-webkit-details-marker]:hidden`}
+      >
         {item.label}
-        <IconChevronDown className="h-3.5 w-3.5 text-muted transition-transform group-open/sub:rotate-180" />
+        <IconChevronDown className="h-3.5 w-3.5 shrink-0 text-muted transition-transform group-open/sub:rotate-180" />
       </summary>
       <div className="ml-3 flex flex-col border-l border-border pl-3">
         {item.columns
@@ -496,11 +504,7 @@ function MobileNavLink({ item, active }: { item: NavItem; active: boolean }) {
               <div key={col.title} className="mt-3 first:mt-0">
                 <p className="px-3 pb-1 text-xs font-semibold text-ink">{col.title}</p>
                 {col.children.map((child) => (
-                  <Link
-                    key={child.href}
-                    href={child.href}
-                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-ink hover:text-ink"
-                  >
+                  <Link key={child.href} href={child.href} className={MOBILE_SUBLINK}>
                     {child.icon && <child.icon className="h-4 w-4 shrink-0 text-muted" />}
                     {child.label}
                   </Link>
@@ -508,11 +512,7 @@ function MobileNavLink({ item, active }: { item: NavItem; active: boolean }) {
               </div>
             ))
           : item.children!.map((child) => (
-              <Link
-                key={child.href}
-                href={child.href}
-                className="block rounded-md px-3 py-2 text-sm text-ink hover:text-ink"
-              >
+              <Link key={child.href} href={child.href} className={MOBILE_SUBLINK}>
                 {child.label}
               </Link>
             ))}
@@ -546,7 +546,10 @@ function MobileMenu({ pathname }: { pathname: string }) {
             <IconUserCircle className="h-4.5 w-4.5" />
             Личный кабинет
           </a>
-          <a href={PHONE_HREF} className="mt-3 flex items-center gap-2 text-sm font-semibold text-ink">
+          <a
+            href={PHONE_HREF}
+            className="-mx-2 mt-2 flex min-h-11 items-center gap-2 rounded-md px-2 text-sm font-semibold text-ink transition-colors hover:bg-blue-tint"
+          >
             <IconPhone className="h-4.5 w-4.5 text-blue" />
             {PHONE_DISPLAY}
           </a>
@@ -555,7 +558,9 @@ function MobileMenu({ pathname }: { pathname: string }) {
             <IconPin className="mt-0.5 h-4.5 w-4.5 shrink-0 text-blue" />
             {ADDRESS}
           </p>
-          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
+          {/* Служебные ссылки в шторке были высотой 20 px и стояли вплотную — на телефоне
+              это гарантированный промах по соседней. */}
+          <div className="-mx-2 mt-2 flex flex-wrap gap-x-1 gap-y-0.5">
             {utilityLinks.map((link) =>
               link.external ? (
                 <a
@@ -563,20 +568,24 @@ function MobileMenu({ pathname }: { pathname: string }) {
                   href={link.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1 text-sm font-medium text-blue hover:text-blue-dark"
+                  className="inline-flex min-h-11 items-center gap-1 rounded-md px-2 text-sm font-medium text-blue transition-colors hover:bg-blue-tint"
                 >
                   {link.label}
                   <IconExternal className="h-3.5 w-3.5" />
                 </a>
               ) : (
-                <Link key={link.label} href={link.href} className="text-sm text-body hover:text-blue">
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="inline-flex min-h-11 items-center rounded-md px-2 text-sm text-body transition-colors hover:bg-blue-tint hover:text-blue"
+                >
                   {link.label}
                 </Link>
               ),
             )}
           </div>
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-            <SocialButtons size="h-9 w-9" />
+            <SocialButtons size="h-11 w-11" />
             <div className="flex flex-wrap items-start gap-2 md:hidden">
               <LanguageSwitch inline />
               <VisionModeToggle />

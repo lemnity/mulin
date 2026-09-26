@@ -5,6 +5,7 @@ import { ContactButton } from "@/components/contact-dialog";
 import type { Program } from "@/lib/programs";
 import { weekdayFull } from "@/lib/programs";
 import type { ProgramDetail } from "@/lib/program-details";
+import { typeAccusative, type ProgramView } from "@/lib/program-content";
 import { useCart } from "@/lib/cart-context";
 import {
   IconArrowRight,
@@ -25,12 +26,22 @@ function formatPrice(price: number) {
   return `${new Intl.NumberFormat("ru-RU").format(price)} ₽`;
 }
 
+/* Боковая карточка — клиентский компонент, поэтому всё, что в неё передано, Next
+   сериализует в разметку страницы. Раньше сюда уходил весь объект Program целиком, и
+   вместе с ним в HTML каждой страницы уезжало СЫРОЕ описание со следами Word
+   («Normal 0 … mso-style-name …») — невидимое глазу, но вполне реальные килобайты.
+   Передаём только то, что карточка рисует. */
 export function ParticipationSidebar({
   program,
+  view,
   detail,
 }: {
-  program: Program;
-  detail: ProgramDetail;
+  program: Pick<
+    Program,
+    "id" | "type" | "price" | "dateLabel" | "weekday" | "format" | "hasCertificate" | "hasLetter"
+  >;
+  view: Pick<ProgramView, "title" | "time">;
+  detail: Pick<ProgramDetail, "platformLabel" | "documentSize">;
 }) {
   const router = useRouter();
   const { addItem, hasItem } = useCart();
@@ -64,7 +75,7 @@ export function ParticipationSidebar({
             </>
           ) : (
             <>
-              Выбрать {program.type === "Курс" ? "курс" : program.type === "Семинар" ? "семинар" : "вебинар"}
+              Выбрать {typeAccusative[program.type]}
               <IconArrowRight className="h-4 w-4" />
             </>
           )}
@@ -85,7 +96,7 @@ export function ParticipationSidebar({
           </span>
           <span className="flex items-start gap-2.5">
             <IconClock className="mt-0.5 h-4 w-4 shrink-0 text-blue" />
-            <span className="text-ink">{program.timeRange}</span>
+            <span className="text-ink">{view.time.label}</span>
           </span>
           <span className="flex items-start gap-2.5">
             {program.format === "Онлайн" ? (
@@ -152,7 +163,7 @@ export function ParticipationSidebar({
         </a>
         <p className="text-xs text-muted">Звонок по России бесплатный</p>
         <ContactButton
-          topic={program.title}
+          topic={view.title}
           className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:border-blue hover:text-blue"
         >
           <IconChat className="h-4 w-4" />

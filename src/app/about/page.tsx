@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import aboutPhoto from "../../../public/hero-cover-2.webp";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -83,18 +85,45 @@ export default function AboutPage() {
       <main id="main" className="flex-1">
         <section className="bg-hero-band">
           <div className="mx-auto max-w-7xl px-6 py-12 lg:px-10 lg:py-16">
-            <p className="text-xs font-semibold tracking-[0.12em] text-blue uppercase">О центре</p>
-            <h1 className="mt-3 max-w-[22ch] text-3xl font-extrabold leading-tight text-ink sm:text-4xl">
-              Тюменский межрегиональный учебный центр «Дом науки и техники»
-            </h1>
-            <p className="mt-4 max-w-[68ch] text-[1.05rem] leading-relaxed text-body">
-              Один из ведущих центров дополнительного профессионального образования Тюменского региона. Мы
-              проводим повышение квалификации и профессиональную переподготовку специалистов предприятий,
-              кредитных организаций, бюджетных учреждений, органов власти и управления. Главным приоритетом
-              для нас были и остаются интересы наших слушателей.
-            </p>
+            <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-14">
+              <div>
+                <p className="text-sm font-semibold text-blue">Тюменский межрегиональный учебный центр</p>
+                <h1 className="mt-3 text-4xl font-extrabold leading-[1.05] tracking-tight text-ink sm:text-5xl">
+                  Дом науки и&nbsp;техники
+                </h1>
+                <p className="mt-5 max-w-[46ch] text-[1.1rem] leading-relaxed text-body">
+                  Повышение квалификации и профессиональная переподготовка для специалистов предприятий,
+                  бюджетных учреждений и органов власти.
+                </p>
+                <p className="mt-3 max-w-[46ch] text-[1.1rem] leading-relaxed text-body">
+                  Главный приоритет — интересы наших слушателей.
+                </p>
+              </div>
 
-            <dl className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="relative">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] shadow-[0_24px_60px_-28px_rgba(20,34,74,0.45)]">
+                  <Image
+                    src={aboutPhoto}
+                    alt="Специалист изучает документы в учебном центре"
+                    fill
+                    priority
+                    sizes="(min-width: 1024px) 560px, 100vw"
+                    className="object-cover object-[65%_center]"
+                  />
+                </div>
+                <div className="absolute -bottom-5 left-5 flex items-center gap-3 rounded-2xl bg-white/95 px-4 py-3 shadow-[0_12px_30px_-12px_rgba(20,34,74,0.35)] backdrop-blur sm:left-8">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-tint text-blue">
+                    <IconCertificate className="h-5 w-5" />
+                  </span>
+                  <span className="text-sm leading-snug">
+                    <span className="block font-bold text-ink">УМЦ ИПБ России № 053</span>
+                    <span className="block text-body">аккредитован с 1996 года</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <dl className="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {facts.map((f, i) => (
                 <div
                   key={f.label}

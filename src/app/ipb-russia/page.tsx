@@ -6,6 +6,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ContactButton } from "@/components/contact-dialog";
 import { CountUp } from "@/components/count-up";
 import { Reveal } from "@/components/reveal";
+import { IpbAccreditationCard } from "@/components/ipb-accreditation-card";
 import {
   IconArrowRight,
   IconCertificate,
@@ -47,13 +48,19 @@ const ties = [
     icon: IconCertificate,
     title: "Учебно-методический центр № 053",
     text: "С октября 1996 года центр аккредитован при ИПБ России: готовит, аттестует и повышает квалификацию профессиональных бухгалтеров.",
-    link: { title: "Свидетельство об аккредитации", href: `${OLD}svid053-2026.pdf` },
+    link: {
+      title: "Свидетельство об аккредитации",
+      href: `${OLD}svid053-2026.pdf`,
+    },
   },
   {
     icon: IconTeam,
     title: "Корпоративный член ИПБ России",
     text: "Центр входит в ИПБ России как корпоративный член.",
-    link: { title: "Сертификат корпоративного члена", href: `${OLD}Sert_IPB_2021.pdf` },
+    link: {
+      title: "Сертификат корпоративного члена",
+      href: `${OLD}Sert_IPB_2021.pdf`,
+    },
   },
   {
     icon: IconFile,
@@ -74,12 +81,36 @@ const benefits = [
 ];
 
 const services = [
-  { title: "Электронное тестирование", text: "Экзамены на аттестат онлайн", href: "http://e-test.ipbr.org/rebuild/extensions/etest/index.php" },
-  { title: "Получить аттестат", text: "Как стать профессиональным бухгалтером", href: `${IPB}/get-certificate/` },
-  { title: "Действительным членам", text: "Раздел для членов ИПБ России", href: `${IPB}/full-members/` },
-  { title: "Повышение профессионального уровня", text: "Требования и программы", href: `${IPB}/full-members/improvement/` },
-  { title: "Единый реестр", text: "Проверка аттестата и членства", href: `${IPB}/registry/` },
-  { title: "Об ИПБ России", text: "Миссия, документы, контакты", href: `${IPB}/about/` },
+  {
+    title: "Электронное тестирование",
+    text: "Экзамены на аттестат онлайн",
+    href: "http://e-test.ipbr.org/rebuild/extensions/etest/index.php",
+  },
+  {
+    title: "Получить аттестат",
+    text: "Как стать профессиональным бухгалтером",
+    href: `${IPB}/get-certificate/`,
+  },
+  {
+    title: "Действительным членам",
+    text: "Раздел для членов ИПБ России",
+    href: `${IPB}/full-members/`,
+  },
+  {
+    title: "Повышение профессионального уровня",
+    text: "Требования и программы",
+    href: `${IPB}/full-members/improvement/`,
+  },
+  {
+    title: "Единый реестр",
+    text: "Проверка аттестата и членства",
+    href: `${IPB}/registry/`,
+  },
+  {
+    title: "Об ИПБ России",
+    text: "Миссия, документы, контакты",
+    href: `${IPB}/about/`,
+  },
 ];
 
 export default function IpbRussiaPage() {
@@ -97,33 +128,44 @@ export default function IpbRussiaPage() {
       <main id="main" className="flex-1">
         <section className="bg-hero-band">
           <div className="mx-auto max-w-7xl px-6 py-12 lg:px-10 lg:py-16">
-            <p className="text-xs font-semibold tracking-[0.12em] text-blue uppercase">Партнёрство</p>
-            <h1 className="mt-3 max-w-[26ch] text-3xl font-extrabold leading-tight text-ink sm:text-4xl">
-              Институт профессиональных бухгалтеров и аудиторов России
-            </h1>
-            <p className="mt-4 max-w-[68ch] text-[1.05rem] leading-relaxed text-body">
-              ИПБ России — крупнейшее некоммерческое профессиональное объединение бухгалтеров и специалистов
-              финансово-экономических служб, субъект негосударственного регулирования бухгалтерского учёта.
-              «Дом науки и техники» — учебно-методический центр ИПБ России № 053.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link
-                href="/attestation"
-                className="inline-flex h-12 items-center gap-2 rounded-xl bg-blue px-6 text-sm font-semibold text-white transition-colors hover:bg-blue-dark"
-              >
-                <IconCertificate className="h-4 w-4" />
-                Аттестация бухгалтеров
-              </Link>
-              <ContactButton
-                topic="ИПБ России"
-                className="inline-flex h-12 items-center gap-2 rounded-xl border border-border bg-surface px-6 text-sm font-semibold text-ink transition-colors hover:border-blue hover:text-blue"
-              >
-                <IconChat className="h-4 w-4" />
-                Задать вопрос
-              </ContactButton>
+            <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-14">
+              <div>
+                <p className="max-w-[40ch] text-sm font-semibold text-blue">
+                  Институт профессиональных бухгалтеров и аудиторов России
+                </p>
+                <h1 className="mt-3 text-4xl font-extrabold leading-[1.05] tracking-tight text-ink sm:text-5xl">
+                  ИПБ России
+                </h1>
+                <p className="mt-5 max-w-[46ch] text-[1.1rem] leading-relaxed text-body">
+                  Крупнейшее профессиональное объединение бухгалтеров и
+                  специалистов финансово-экономических служб в стране.
+                </p>
+                <p className="mt-3 max-w-[46ch] text-[1.1rem] leading-relaxed text-body">
+                  «Дом науки и техники» готовит и аттестует бухгалтеров как
+                  учебно-методический центр ИПБ.
+                </p>
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <Link
+                    href="/attestation"
+                    className="inline-flex h-12 items-center gap-2 rounded-xl bg-blue px-6 text-sm font-semibold text-white transition-colors hover:bg-blue-dark"
+                  >
+                    <IconCertificate className="h-4 w-4" />
+                    Аттестация бухгалтеров
+                  </Link>
+                  <ContactButton
+                    topic="ИПБ России"
+                    className="inline-flex h-12 items-center gap-2 rounded-xl border border-border bg-surface px-6 text-sm font-semibold text-ink transition-colors hover:border-blue hover:text-blue"
+                  >
+                    <IconChat className="h-4 w-4" />
+                    Задать вопрос
+                  </ContactButton>
+                </div>
+              </div>
+
+              <IpbAccreditationCard />
             </div>
 
-            <dl className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <dl className="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {ipbFacts.map((f, i) => (
                 <div
                   key={f.label}
@@ -137,7 +179,9 @@ export default function IpbRussiaPage() {
                       delayMs={250 + i * 150}
                       className="tabular block text-3xl font-extrabold leading-none text-ink"
                     />
-                    <span className="mt-2 block text-sm leading-snug text-body">{f.label}</span>
+                    <span className="mt-2 block text-sm leading-snug text-body">
+                      {f.label}
+                    </span>
                   </dd>
                 </div>
               ))}
@@ -146,7 +190,9 @@ export default function IpbRussiaPage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-6 pt-14 lg:px-10">
-          <h2 className="text-2xl font-extrabold text-ink">Центр и ИПБ России</h2>
+          <h2 className="text-2xl font-extrabold text-ink">
+            Центр и ИПБ России
+          </h2>
           <ul className="mt-6 grid gap-4 md:grid-cols-3">
             {ties.map(({ icon: Icon, title, text, link }, i) => (
               <li key={title}>
@@ -156,7 +202,9 @@ export default function IpbRussiaPage() {
                       <Icon className="h-5 w-5" />
                     </span>
                     <h3 className="mt-4 text-lg font-bold text-ink">{title}</h3>
-                    <p className="mt-2 mb-4 text-sm leading-relaxed text-body">{text}</p>
+                    <p className="mt-2 mb-4 text-sm leading-relaxed text-body">
+                      {text}
+                    </p>
                     {link && (
                       <a
                         href={link.href}
@@ -178,11 +226,17 @@ export default function IpbRussiaPage() {
         <section className="mx-auto max-w-7xl px-6 pt-14 lg:px-10">
           <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr] lg:gap-10">
             <div>
-              <h2 className="text-2xl font-extrabold text-ink">Преимущества членства в ИПБ России</h2>
+              <h2 className="text-2xl font-extrabold text-ink">
+                Преимущества членства в ИПБ России
+              </h2>
               <ul className="mt-6 grid gap-2.5 sm:grid-cols-2">
                 {benefits.map((b, i) => (
                   <li key={b}>
-                    <Reveal subtle delayMs={(i % 2) * 70} className="flex h-full items-start gap-3 rounded-xl border border-border bg-surface p-4">
+                    <Reveal
+                      subtle
+                      delayMs={(i % 2) * 70}
+                      className="flex h-full items-start gap-3 rounded-xl border border-border bg-surface p-4"
+                    >
                       <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue text-white">
                         <IconCheck className="h-3.5 w-3.5" />
                       </span>
@@ -198,18 +252,22 @@ export default function IpbRussiaPage() {
                 <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#E8F0FD] text-blue">
                   <IconCoins className="h-6 w-6" />
                 </span>
-                <h2 className="mt-4 text-xl font-extrabold text-ink">Членские взносы</h2>
+                <h2 className="mt-4 text-xl font-extrabold text-ink">
+                  Членские взносы
+                </h2>
                 <p className="mt-3">
-                  <span className="tabular text-4xl font-extrabold text-ink">4 200 ₽</span>
+                  <span className="tabular text-4xl font-extrabold text-ink">
+                    4 200 ₽
+                  </span>
                   <span className="ml-2 text-sm text-body">в год</span>
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-body">
-                  Для членов ИПБ России и Тюменского ТИПБ: 1 550 ₽ центр перечисляет в ИПБ России, 2 650 ₽ остаётся
-                  в Тюменском ТИПБ.
+                  Для членов ИПБ России и Тюменского ТИПБ: 1 550 ₽ центр
+                  перечисляет в ИПБ России, 2 650 ₽ остаётся в Тюменском ТИПБ.
                 </p>
                 <p className="mt-3 rounded-xl bg-surface px-4 py-3 text-sm leading-relaxed text-ink ring-1 ring-inset ring-border">
-                  В комментарии к платежу обязательно укажите ФИО полностью и номер членского билета — иначе платёж
-                  останется неопознанным.
+                  В комментарии к платежу обязательно укажите ФИО полностью и
+                  номер членского билета — иначе платёж останется неопознанным.
                 </p>
                 <a
                   href={`${OLD}izv_2026.xls`}
@@ -222,7 +280,10 @@ export default function IpbRussiaPage() {
                 </a>
                 <p className="mt-4 text-sm text-body">
                   Своевременная оплата взносов — одно из условий{" "}
-                  <Link href="/attestation/renewal" className="text-blue underline underline-offset-2 hover:text-blue-dark">
+                  <Link
+                    href="/attestation/renewal"
+                    className="text-blue underline underline-offset-2 hover:text-blue-dark"
+                  >
                     продления аттестата
                   </Link>
                   .
@@ -233,7 +294,9 @@ export default function IpbRussiaPage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-6 pt-14 lg:px-10">
-          <h2 className="text-2xl font-extrabold text-ink">Сервисы ИПБ России</h2>
+          <h2 className="text-2xl font-extrabold text-ink">
+            Сервисы ИПБ России
+          </h2>
           <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {services.map((s, i) => (
               <li key={s.href}>
@@ -245,10 +308,16 @@ export default function IpbRussiaPage() {
                     className="group flex h-full items-center gap-4 rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-blue"
                   >
                     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-tint text-blue">
-                      {s.title === "Единый реестр" ? <IconSearch className="h-5 w-5" /> : <IconExternal className="h-5 w-5" />}
+                      {s.title === "Единый реестр" ? (
+                        <IconSearch className="h-5 w-5" />
+                      ) : (
+                        <IconExternal className="h-5 w-5" />
+                      )}
                     </span>
                     <span className="flex-1">
-                      <span className="block font-semibold text-ink group-hover:text-blue">{s.title}</span>
+                      <span className="block font-semibold text-ink group-hover:text-blue">
+                        {s.title}
+                      </span>
                       <span className="block text-sm text-body">{s.text}</span>
                     </span>
                   </a>
@@ -261,35 +330,60 @@ export default function IpbRussiaPage() {
         <section className="mx-auto max-w-7xl px-6 py-14 lg:px-10">
           <div className="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
             <div className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
-              <h2 className="text-xl font-extrabold text-ink">Контакты ИПБ России</h2>
+              <h2 className="text-xl font-extrabold text-ink">
+                Контакты ИПБ России
+              </h2>
               <ul className="mt-4 flex flex-col gap-2.5 text-sm">
                 <li className="flex flex-wrap items-center gap-2.5">
                   <IconPhone className="h-4 w-4 shrink-0 text-blue" />
-                  <a href="tel:88005005451" className="tabular font-semibold text-ink hover:text-blue">
+                  <a
+                    href="tel:88005005451"
+                    className="tabular font-semibold text-ink hover:text-blue"
+                  >
                     8 800 500-54-51
                   </a>
                   <span className="text-muted">бесплатно из всех регионов</span>
                 </li>
                 <li className="flex flex-wrap items-center gap-2.5">
                   <IconPhone className="h-4 w-4 shrink-0 text-blue" />
-                  <a href="tel:+74958186565" className="tabular font-semibold text-ink hover:text-blue">
+                  <a
+                    href="tel:+74958186565"
+                    className="tabular font-semibold text-ink hover:text-blue"
+                  >
                     +7 (495) 818-65-65
                   </a>
                 </li>
                 <li className="flex flex-wrap items-center gap-2.5">
                   <IconMail className="h-4 w-4 shrink-0 text-blue" />
-                  <a href="mailto:info@ipbr.org" className="font-semibold text-ink hover:text-blue">
+                  <a
+                    href="mailto:info@ipbr.org"
+                    className="font-semibold text-ink hover:text-blue"
+                  >
                     info@ipbr.org
                   </a>
                 </li>
               </ul>
-              <p className="mt-4 text-sm text-body">Москва, ул. Тверская, д. 22Б, стр. 3.</p>
+              <p className="mt-4 text-sm text-body">
+                Москва, ул. Тверская, д. 22Б, стр. 3.
+              </p>
             </div>
             <ul className="grid gap-2.5">
               {[
-                { href: "/attestation", title: "Аттестация бухгалтеров", icon: IconCertificate },
-                { href: "/attestation/renewal", title: "Продление аттестата", icon: IconRefresh },
-                { href: "/attestation/results", title: "Результаты аттестации", icon: IconCheck },
+                {
+                  href: "/attestation",
+                  title: "Аттестация бухгалтеров",
+                  icon: IconCertificate,
+                },
+                {
+                  href: "/attestation/renewal",
+                  title: "Продление аттестата",
+                  icon: IconRefresh,
+                },
+                {
+                  href: "/attestation/results",
+                  title: "Результаты аттестации",
+                  icon: IconCheck,
+                },
               ].map(({ href, title, icon: Icon }) => (
                 <li key={href}>
                   <Link
@@ -299,7 +393,9 @@ export default function IpbRussiaPage() {
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-tint text-blue">
                       <Icon className="h-5 w-5" />
                     </span>
-                    <span className="flex-1 font-semibold text-ink group-hover:text-blue">{title}</span>
+                    <span className="flex-1 font-semibold text-ink group-hover:text-blue">
+                      {title}
+                    </span>
                     <IconArrowRight className="h-4 w-4 text-blue" />
                   </Link>
                 </li>
